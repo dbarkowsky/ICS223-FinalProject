@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     private float speed = 30f;
+    private float rotateSpeed = 360 * 5;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,5 +16,6 @@ public class BulletController : MonoBehaviour
     void Update()
     {
         transform.position += Vector3.up * speed * Time.deltaTime;
+        transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);// Quaternion.Euler(Vector3.forward * rotateSpeed * Time.deltaTime);
     }
 }
