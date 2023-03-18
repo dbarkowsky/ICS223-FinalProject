@@ -10,14 +10,15 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         currentPosition = transform.position;
-        endPosition = new Vector2(currentPosition.x, Constants.cameraStopPointY);
+        endPosition = new Vector2(currentPosition.x, Constants.endOfLevelY);
     }
 
     // Update is called once per frame
     void Update()
     {
         currentPosition = transform.position;
-        while (currentPosition.y < endPosition.y)
+
+        if (currentPosition.y < endPosition.y)
         {
             transform.position += new Vector3(0, Constants.scrollSpeed * Time.deltaTime, 0);
         }
