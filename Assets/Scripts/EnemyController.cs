@@ -47,15 +47,6 @@ public class EnemyController : MonoBehaviour
     {
         float timeElapsed = 0;
         float durationPerMove = 2;
-    //    float startTime = Time.time;
-    //    while (timeElapsed < durationPerMove)
-    //    {
-    //        transform.position = Vector2.Lerp(startPos, pausePos, timeElapsed);
-    //        timeElapsed += Time.deltaTime;
-    //        yield return null;
-    //    }
-        
-    //    yield return new WaitForSeconds(durationPerMove);
 
         transform.position = startPos;
         while (timeElapsed < durationPerMove)
