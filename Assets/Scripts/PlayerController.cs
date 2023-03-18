@@ -52,6 +52,10 @@ public class PlayerController : MonoBehaviour
             }
         }
         
+        if (hp == 0)
+        {
+            Messenger<PlayerController>.Broadcast(GameEvent.PLAYER_DEAD, this);
+        }
     }
 
 
