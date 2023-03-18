@@ -8,13 +8,15 @@ public class PlayerController : MonoBehaviour
 {
     private CharacterController cc;
     private float speed = 8f;
-    [SerializeField] GameObject bullet;
-    private bool canShoot = true; // used to handle cooldown between shots
+    [SerializeField] FiringPointController[] firingPoints;
+    FiringPointController mainFiringPoint;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        mainFiringPoint = firingPoints[0];
     }
 
     // Update is called once per frame
@@ -27,19 +29,16 @@ public class PlayerController : MonoBehaviour
         Vector2 direction = new Vector2(xMove, yMove) * speed * Time.deltaTime;
         cc.Move(Vector2.ClampMagnitude(direction + new Vector2(0, Constants.scrollSpeed) * Time.deltaTime, 1));
 
-        if (firing & canShoot)
+        foreach(FiringPointController point in firingPoints)
         {
-            canShoot = false;
-            StartCoroutine(Fire());
+            if (firing & point.canShoot)
+            {
+                point.canShoot = false;
+                StartCoroutine(point.Fire());
+            }
         }
+        
     }
 
-    IEnumerator Fire()
-    {
-        Vector3 pos = transform.position;
-        Quaternion rotation = transform.rotation;
-        Instantiate(bullet, pos, rotation);
-        yield return new WaitForSecondsRealtime(0.125f);
-        canShoot = true;
-    }
+
 }
