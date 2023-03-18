@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,10 +7,16 @@ using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
+    // Character control
     private CharacterController cc;
     private float speed = 8f;
+
+    // Character shooting
     [SerializeField] FiringPointController[] firingPoints;
     FiringPointController mainFiringPoint;
+
+    // Character attributes
+    private uint hp = 1; // character only takes one hit...
     
 
     // Start is called before the first frame update
@@ -17,6 +24,14 @@ public class PlayerController : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         mainFiringPoint = firingPoints[0];
+
+        // disable all firing points to start. They are activated upon pickups
+        foreach (FiringPointController point in firingPoints)
+        {
+            point.isActive = false;
+        }
+        // Activate main firing point
+        mainFiringPoint.isActive = true;
     }
 
     // Update is called once per frame
@@ -31,9 +46,8 @@ public class PlayerController : MonoBehaviour
 
         foreach(FiringPointController point in firingPoints)
         {
-            if (firing & point.canShoot)
+            if (firing && point.pointCanShoot())
             {
-                point.canShoot = false;
                 StartCoroutine(point.Fire());
             }
         }

@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 8129172987191222152, guid: d423d57bb3abefb43b2314bf956003d4, type: 3}
   canShoot: 1
-  cooldown: 0.125
+  cooldown: 0.3
 --- !u!1 &1472112274
 GameObject:
   m_ObjectHideFlags: 0
