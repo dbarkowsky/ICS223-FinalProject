@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    private Vector2 currentPosition;
+    private Vector2 endPosition;
     // Start is called before the first frame update
     void Start()
     {
-        Vector2 currentPosition = transform.position;
-        Vector2 endPosition = new Vector2(currentPosition.x, 147);
+        currentPosition = transform.position;
+        endPosition = new Vector2(currentPosition.x, Constants.cameraStopPointY);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 currentPosition = transform.position;
-        transform.position += new Vector3(0, Constants.scrollSpeed * Time.deltaTime, 0);
+        currentPosition = transform.position;
+        while (currentPosition.y < endPosition.y)
+        {
+            transform.position += new Vector3(0, Constants.scrollSpeed * Time.deltaTime, 0);
+        }
     }
 }
