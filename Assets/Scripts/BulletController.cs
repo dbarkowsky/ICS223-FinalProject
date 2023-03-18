@@ -17,5 +17,12 @@ public class BulletController : MonoBehaviour
     {
         transform.position += Vector3.up * speed * Time.deltaTime;
         transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);// Quaternion.Euler(Vector3.forward * rotateSpeed * Time.deltaTime);
+        StartCoroutine(DestroyMe());
+    }
+
+    IEnumerator DestroyMe()
+    {
+        yield return new WaitForSecondsRealtime(Constants.bulletLifeTime);
+        Destroy(gameObject);
     }
 }

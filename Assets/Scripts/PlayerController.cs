@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         bool firing = Input.GetButton("Fire");
 
         Vector2 direction = new Vector2(xMove, yMove) * speed * Time.deltaTime;
-        cc.Move(Vector2.ClampMagnitude(direction, 1));
+        cc.Move(Vector2.ClampMagnitude(direction + new Vector2(0, Constants.scrollSpeed) * Time.deltaTime, 1));
 
         if (firing & canShoot)
         {
