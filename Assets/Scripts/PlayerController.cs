@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
         {
             if (firing && point.pointCanShoot())
             {
-                StartCoroutine(point.Fire());
+                point.Fire();
             }
         }
         
