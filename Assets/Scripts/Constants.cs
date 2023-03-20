@@ -6,7 +6,7 @@ public static class Constants
 {
     public static float scrollSpeed = 0.5f;
     public static float endOfLevelY = 147f;
-    public static float bulletLifeTime = 1.0f; // seconds
+    public static float bulletLifeTime = 5.0f; // seconds
     
 }
 

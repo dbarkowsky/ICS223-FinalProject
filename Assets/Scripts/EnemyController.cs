@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,16 +32,27 @@ public class EnemyController : MonoBehaviour
     Transform from;
     Transform to;
     float timeCount = 0.0f;
+
+    [SerializeField] FiringPointController[] firingPoints;
+    FiringPointController mainFiringPoint;
+
     // Start is called before the first frame update
     void Start()
     {
+        mainFiringPoint = firingPoints[0];
         StartCoroutine(FlyDown_Pause_FlyDown(startPos, endPos, pausePos));
     }
 
     // Update is called once per frame
     void Update()
     {
-        //transform.position = Quaternion.Lerp(from.rotation, to.position, timeCount * 0.01);
+        foreach (FiringPointController point in firingPoints)
+        {
+            if (point.pointCanShoot())
+            {
+                point.Fire();
+            }
+        }
     }
 
     IEnumerator FlyDown_Pause_FlyDown(Vector2 startPos, Vector2 endPos, Vector2 pausePos)

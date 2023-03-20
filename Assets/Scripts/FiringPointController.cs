@@ -13,7 +13,6 @@ public enum FiringPattern
 public class FiringPointController : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
-    private BulletController bulletController;
     [SerializeField] FiringPattern pattern;
     public bool isActive = true;
     private bool canShoot = true; // used to handle cooldown between shots
@@ -22,7 +21,6 @@ public class FiringPointController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bulletController = bullet.GetComponent<BulletController>();
     }
 
     // Update is called once per frame

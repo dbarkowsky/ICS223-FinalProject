@@ -10,7 +10,7 @@ public enum BulletType
 
 public class BulletController : MonoBehaviour
 {
-    private float speed = 30f;
+    public float speed = 30f;
     private float rotateSpeed = 360 * 5;
     Vector3 direction = Vector3.up; // default is upwards
     private float angle = 0f; // IN DEGREES! TRIG FUNCTIONS DON'T WORK LIKE THIS, CONVERT TO RADIANS BEFORE TRIG
@@ -19,7 +19,7 @@ public class BulletController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetDirection();
     }
 
     // Update is called once per frame
@@ -44,6 +44,7 @@ public class BulletController : MonoBehaviour
         float xVelocity;
         float yVelocity;
 
+        // non-right angles need to be specified first
         if (absoluteAngle == 0)
         {
             xVelocity = 0;
@@ -92,6 +93,7 @@ public class BulletController : MonoBehaviour
         // flip if it's an enemy bullet
         if (type == BulletType.Enemy)
         {
+            Debug.Log("enemy fire");
             xVelocity *= -1;
             yVelocity *= -1;
         }
