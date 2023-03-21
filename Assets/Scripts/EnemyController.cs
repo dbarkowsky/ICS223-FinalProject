@@ -12,19 +12,9 @@ public enum MovementPatterns
     DropDownWiggle
 }
 
-public enum FiringPatterns
-{
-    None,
-    DirectShot,
-    Spread,
-    Spiral,
-    RotatingX
-}
-
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private MovementPatterns movementPattern;
-    [SerializeField] private FiringPatterns firingPattern;
     private float speed = 5f;
     Vector2 startPos = new Vector2(-6.5f, 7f);
     Vector2 pausePos = new Vector2(-6.5f, 0f);

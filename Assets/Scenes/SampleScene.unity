@@ -526,7 +526,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementPattern: 2
-  firingPattern: 0
   firingPoints:
   - {fileID: 1866454607}
 --- !u!4 &351673618
@@ -884,6 +883,7 @@ GameObject:
   m_Component:
   - component: {fileID: 739676646}
   - component: {fileID: 739676645}
+  - component: {fileID: 739676647}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -921,6 +921,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &739676647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739676644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19750c65eedaff46918cc302e5406bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &757554877
 GameObject:
   m_ObjectHideFlags: 0
