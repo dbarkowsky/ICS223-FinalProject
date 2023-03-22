@@ -52,11 +52,37 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        if (hp == 0)
+        if (hp <= 0)
         {
             Messenger<PlayerController>.Broadcast(GameEvent.PLAYER_DEAD, this);
+            Debug.Log("player hit");
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        Debug.Log("hit");
+        if (other.collider.CompareTag("EnemyBullet"))
+        {
+            hp -= 1;
+            Destroy(other.gameObject);
         }
     }
 
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("hit");
+        if (other.CompareTag("EnemyBullet"))
+        {
+            hp -= 1;
+            Destroy(other.gameObject);
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Debug.Log("wow");
+    }
 }

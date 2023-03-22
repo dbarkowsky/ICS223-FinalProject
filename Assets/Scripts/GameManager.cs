@@ -22,13 +22,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Messenger<PlayerController>.AddListener(GameEvent.PLAYER_DEAD, this.OnPlayerDead); // generic parameter is what's passed to function
-        Messenger<EnemyController>.AddListener(GameEvent.ENEMY_DESTROYED, this.OnEnemyDestroyed);
     }
 
     private void OnDestroy()
     {
         Messenger<PlayerController>.RemoveListener(GameEvent.PLAYER_DEAD, this.OnPlayerDead);
-        Messenger<EnemyController>.RemoveListener(GameEvent.ENEMY_DESTROYED, this.OnEnemyDestroyed);
     }
 
     private void OnPlayerDead(PlayerController player)

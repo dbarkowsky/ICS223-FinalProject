@@ -15,13 +15,14 @@ public enum MovementPatterns
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private MovementPatterns movementPattern;
+    private BoxCollider2D collider;
     private float speed = 5f;
-    Vector2 startPos = new Vector2(-6.5f, 7f);
     Vector2 pausePos = new Vector2(-6.5f, 0f);
     Vector2 endPos = new Vector2(-6.5f, -15f);
     Transform from;
     Transform to;
     float timeCount = 0.0f;
+    private bool canShoot = true;
 
     [SerializeField] FiringPointController[] firingPoints;
     FiringPointController mainFiringPoint;
@@ -29,8 +30,16 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        collider = gameObject.GetComponent<BoxCollider2D>();
         mainFiringPoint = firingPoints[0];
-        StartCoroutine(FlyDown_Pause_FlyDown(startPos, endPos, pausePos));
+        switch (movementPattern)
+        {
+            case MovementPatterns.DropDownPauseContinue:
+                StartCoroutine(FlyDown_Pause_FlyDown());
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -38,24 +47,55 @@ public class EnemyController : MonoBehaviour
     {
         foreach (FiringPointController point in firingPoints)
         {
-            if (point.pointCanShoot())
+            if (point.pointCanShoot() && canShoot)
             {
                 point.Fire();
             }
         }
     }
 
-    IEnumerator FlyDown_Pause_FlyDown(Vector2 startPos, Vector2 endPos, Vector2 pausePos)
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("hit");
+        if (other.CompareTag("PlayerBullet"))
+        {
+            Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+            Destroy(other.gameObject);
+        }
+    }
+
+    // Given a camera, determines if the enemy is visible on screen and sets their ability to shoot
+    public void AmIOnScreen(Camera cam)
+    {
+        // Get the enemy's position relative to the centre of the camera
+        // bottom left is [0,0], top right is [1,1]
+        Vector3 positionRelativeToCamera = cam.WorldToViewportPoint(transform.position);
+        float screenBuffer = 0.1f; // the area on edge of screen where an enemy might be, but shouldn't be shooting from
+        if (
+            positionRelativeToCamera.x > 0 + screenBuffer && 
+            positionRelativeToCamera.x < 0.75 - screenBuffer &&
+            positionRelativeToCamera.y > 0 + screenBuffer &&
+            positionRelativeToCamera.y < 1 - screenBuffer
+        )
+        {
+            canShoot = true;
+        } else
+        {
+            canShoot = false;
+        }
+    }
+
+    // All movement patterns go here:
+    IEnumerator FlyDown_Pause_FlyDown()
     {
         float timeElapsed = 0;
         float durationPerMove = 2;
 
-        transform.position = startPos;
         while (timeElapsed < durationPerMove)
         {
             Vector2 currentPosition = transform.position;
             float time = timeElapsed / durationPerMove;
-            transform.position = Vector2.Lerp(currentPosition, pausePos, time * Time.deltaTime);
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 6f), time * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
@@ -65,11 +105,10 @@ public class EnemyController : MonoBehaviour
         {
             Vector2 currentPosition = transform.position;
             float time = timeElapsed / durationPerMove;
-            transform.position = Vector2.Lerp(currentPosition, endPos, time * Time.deltaTime);
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 12f), time * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        transform.position = endPos;
     }
 
 }

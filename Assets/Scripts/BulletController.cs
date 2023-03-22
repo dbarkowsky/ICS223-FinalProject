@@ -93,7 +93,7 @@ public class BulletController : MonoBehaviour
         // flip if it's an enemy bullet
         if (type == BulletType.Enemy)
         {
-            Debug.Log("enemy fire");
+            //Debug.Log("enemy fire");
             xVelocity *= -1;
             yVelocity *= -1;
         }
