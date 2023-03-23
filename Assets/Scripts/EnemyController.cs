@@ -56,9 +56,9 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("hit");
         if (other.CompareTag("PlayerBullet"))
         {
+            Debug.Log("enemy hit");
             Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
             Destroy(other.gameObject);
         }
@@ -83,6 +83,19 @@ public class EnemyController : MonoBehaviour
         {
             canShoot = false;
         }
+    }
+
+    // Is this enemy below the screen? Delete it
+    public bool AmIBelowScreen(Camera cam)
+    {
+        // Get the enemy's position relative to the centre of the camera
+        // bottom left is [0,0], top right is [1,1]
+        Vector3 positionRelativeToCamera = cam.WorldToViewportPoint(transform.position);
+        if (positionRelativeToCamera.y < -0.1)
+        {
+            return true;
+        }
+        return false;
     }
 
     // All movement patterns go here:

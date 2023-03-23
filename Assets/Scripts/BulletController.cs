@@ -15,6 +15,7 @@ public class BulletController : MonoBehaviour
     Vector3 direction = Vector3.up; // default is upwards
     private float angle = 0f; // IN DEGREES! TRIG FUNCTIONS DON'T WORK LIKE THIS, CONVERT TO RADIANS BEFORE TRIG
     [SerializeField] BulletType type;
+    [SerializeField] float timeToLive = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class BulletController : MonoBehaviour
 
     IEnumerator DestroyMe()
     {
-        yield return new WaitForSecondsRealtime(Constants.bulletLifeTime);
+        yield return new WaitForSecondsRealtime(timeToLive);
         Destroy(gameObject);
     }
 
@@ -119,4 +120,12 @@ public class BulletController : MonoBehaviour
         float radians = (Mathf.PI / 180) * degrees;
         return (radians);
     }
+
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if ((other.CompareTag("Player") && type == BulletType.Enemy) || (other.CompareTag("Enemy") && type == BulletType.Player))
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
 }

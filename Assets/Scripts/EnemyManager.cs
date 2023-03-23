@@ -13,7 +13,6 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Quaternion rotation = transform.rotation;
         GameObject enemy = Instantiate(enemyPrefabs[0], this.transform);
         enemy.transform.position = spawnPoints[5].transform.position;
         enemies.Add(enemy);
@@ -22,9 +21,14 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        enemies.ForEach(delegate (GameObject enemy)
+        List<GameObject> enemiesCopy = new List<GameObject>(enemies); // copy to avoid changing list while iterating through it
+        enemiesCopy.ForEach(delegate (GameObject enemy)
         {
             enemy.GetComponent<EnemyController>().AmIOnScreen(cam);
+            if (enemy.GetComponent<EnemyController>().AmIBelowScreen(cam))
+            {
+                DestroyEnemy(enemy);
+            }
         });
     }
 
@@ -40,11 +44,16 @@ public class EnemyManager : MonoBehaviour
 
     private void OnEnemyDestroyed(GameObject enemy)
     {
-        if (enemy)
+        if (enemy != null)
         {
             Debug.Log(this + " Enemy destroyed.");
-            enemies.RemoveAt(enemies.IndexOf(enemy));
-            Destroy(enemy);
+            DestroyEnemy(enemy);
         }
+    }
+
+    private void DestroyEnemy(GameObject enemy)
+    {
+        enemies.RemoveAt(enemies.IndexOf(enemy));
+        Destroy(enemy);
     }
 }

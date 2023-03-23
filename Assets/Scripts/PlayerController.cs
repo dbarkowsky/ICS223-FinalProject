@@ -8,12 +8,13 @@ using static UnityEngine.GraphicsBuffer;
 public class PlayerController : MonoBehaviour
 {
     // Character control
-    private CharacterController cc;
     private float speed = 8f;
 
     // Character shooting
     [SerializeField] FiringPointController[] firingPoints;
     FiringPointController mainFiringPoint;
+    Rigidbody2D rb;
+    [SerializeField] Camera cam;
 
     // Character attributes
     private uint hp = 1; // character only takes one hit...
@@ -22,7 +23,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cc = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody2D>();
         mainFiringPoint = firingPoints[0];
 
         // disable all firing points to start. They are activated upon pickups
@@ -41,10 +42,20 @@ public class PlayerController : MonoBehaviour
         float yMove = Input.GetAxis("Vertical");
         bool firing = Input.GetButton("Fire");
 
-        Vector2 direction = new Vector2(xMove, yMove) * speed * Time.deltaTime;
-        cc.Move(Vector2.ClampMagnitude(direction + new Vector2(0, Constants.scrollSpeed) * Time.deltaTime, 1));
+        // don't let player leave view!
+        // bottom left is [0,0], top right is [1,1]
+        Vector3 positionRelativeToCamera = cam.WorldToViewportPoint(transform.position);
+        if (positionRelativeToCamera.y < 0.05 && yMove < 0) { yMove = 0; }
+        if (positionRelativeToCamera.y > 0.95 && yMove > 0) { yMove = 0; }
+        if (positionRelativeToCamera.x < 0.03 && xMove < 0) { xMove = 0; }
+        if (positionRelativeToCamera.x > 0.70 && xMove > 0) { xMove = 0; }
 
-        foreach(FiringPointController point in firingPoints)
+        Vector3 direction = new Vector3(xMove, yMove) * speed * Time.deltaTime;
+        transform.position += Vector3.ClampMagnitude(new Vector3(direction.x, direction.y, 0), 1);
+        //rb.position += Vector2.ClampMagnitude(new Vector2(direction.x, direction.y), 1);
+        //rb.MovePosition(Vector2.ClampMagnitude(new Vector2(direction.x, direction.y), 1));
+
+        foreach (FiringPointController point in firingPoints)
         {
             if (firing && point.pointCanShoot())
             {
@@ -52,19 +63,19 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        if (hp <= 0)
-        {
-            Messenger<PlayerController>.Broadcast(GameEvent.PLAYER_DEAD, this);
-            Debug.Log("player hit");
-        }
+        //if (hp <= 0)
+        //{
+        //    Messenger.Broadcast(GameEvent.PLAYER_DEAD);
+        //    Debug.Log("player hit");
+        //}
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("hit");
-        if (other.collider.CompareTag("EnemyBullet"))
+        if (other.CompareTag("EnemyBullet"))
         {
-            hp -= 1;
+            Debug.Log("hit player");
+            Messenger.Broadcast(GameEvent.PLAYER_DEAD);
             Destroy(other.gameObject);
         }
     }
