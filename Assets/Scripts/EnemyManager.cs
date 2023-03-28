@@ -13,9 +13,7 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject enemy = Instantiate(enemyPrefabs[0], this.transform);
-        enemy.transform.position = spawnPoints[5].transform.position;
-        enemies.Add(enemy);
+       
     }
 
     // Update is called once per frame
@@ -35,11 +33,28 @@ public class EnemyManager : MonoBehaviour
     private void Awake()
     {
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
+        Messenger<int>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
     private void OnDestroy()
     {
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
+    }
+
+    private void OnEnemyTriggerReached(int triggerID)
+    {
+        Debug.Log(triggerID.ToString());
+        switch (triggerID)
+        {
+            case 0:
+                int spawnPoint = Random.Range(3, 7);
+                GameObject enemy = Instantiate(enemyPrefabs[0], this.transform);
+                enemy.transform.position = spawnPoints[spawnPoint].transform.position;
+                enemies.Add(enemy);
+                break;
+            default:
+                break;
+        }
     }
 
     private void OnEnemyDestroyed(GameObject enemy)

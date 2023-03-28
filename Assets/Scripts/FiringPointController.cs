@@ -58,7 +58,7 @@ public class FiringPointController : MonoBehaviour
         canShoot = false;
         Vector3 pos = transform.position;
         Quaternion rotation = transform.rotation;
-        Instantiate(bullet, pos, rotation, this.transform);
+        Instantiate(bullet, pos, rotation);
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
     }
@@ -70,8 +70,8 @@ public class FiringPointController : MonoBehaviour
         Quaternion rotation = transform.rotation;
         float bulletOffset = 0.5f;
         Instantiate(bullet, pos, rotation);
-        Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation, this.transform);
-        Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation, this.transform);
+        Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation);
+        Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation);
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
     }
@@ -83,11 +83,11 @@ public class FiringPointController : MonoBehaviour
         Vector3 pos = transform.position;
         Quaternion rotation = transform.rotation;
         // Have to make separate instances here, or it functions like a shallow copy
-        GameObject bullet1 = Instantiate(bullet, pos, rotation, this.transform);
+        GameObject bullet1 = Instantiate(bullet, pos, rotation);
         bullet1.GetComponent<BulletController>().SetAngle(0);
-        GameObject bullet2 = Instantiate(bullet, pos, rotation, this.transform);
+        GameObject bullet2 = Instantiate(bullet, pos, rotation);
         bullet2.GetComponent<BulletController>().SetAngle(spread);
-        GameObject bullet3 = Instantiate(bullet, pos, rotation, this.transform);
+        GameObject bullet3 = Instantiate(bullet, pos, rotation);
         bullet3.GetComponent<BulletController>().SetAngle(360-spread);
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;

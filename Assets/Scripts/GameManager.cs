@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject player;
+    [SerializeField] PlayerController player;
     [SerializeField] GameObject background;
-    [SerializeField] Camera view;
+    [SerializeField] Camera cam;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerDead()
     {
-        Destroy(player);
+        player.Respawn();
     }
 
 }

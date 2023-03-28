@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Camera cam;
 
     // Character attributes
-    private uint hp = 1; // character only takes one hit...
+    private bool isDead = false;
     
 
     // Start is called before the first frame update
@@ -42,58 +42,61 @@ public class PlayerController : MonoBehaviour
         float yMove = Input.GetAxis("Vertical");
         bool firing = Input.GetButton("Fire");
 
-        // don't let player leave view!
-        // bottom left is [0,0], top right is [1,1]
-        Vector3 positionRelativeToCamera = cam.WorldToViewportPoint(transform.position);
-        if (positionRelativeToCamera.y < 0.05 && yMove < 0) { yMove = 0; }
-        if (positionRelativeToCamera.y > 0.95 && yMove > 0) { yMove = 0; }
-        if (positionRelativeToCamera.x < 0.03 && xMove < 0) { xMove = 0; }
-        if (positionRelativeToCamera.x > 0.70 && xMove > 0) { xMove = 0; }
-
-        Vector3 direction = new Vector3(xMove, yMove) * speed * Time.deltaTime;
-        transform.position += Vector3.ClampMagnitude(new Vector3(direction.x, direction.y, 0), 1);
-        //rb.position += Vector2.ClampMagnitude(new Vector2(direction.x, direction.y), 1);
-        //rb.MovePosition(Vector2.ClampMagnitude(new Vector2(direction.x, direction.y), 1));
-
-        foreach (FiringPointController point in firingPoints)
+        if (!isDead)
         {
-            if (firing && point.pointCanShoot())
+            // don't let player leave view!
+            // bottom left is [0,0], top right is [1,1]
+            Vector3 positionRelativeToCamera = cam.WorldToViewportPoint(transform.position);
+            if (positionRelativeToCamera.y < 0.05 && yMove < 0) { yMove = 0; }
+            if (positionRelativeToCamera.y > 0.95 && yMove > 0) { yMove = 0; }
+            if (positionRelativeToCamera.x < 0.03 && xMove < 0) { xMove = 0; }
+            if (positionRelativeToCamera.x > 0.70 && xMove > 0) { xMove = 0; }
+
+            Vector3 direction = new Vector3(xMove, yMove) * speed * Time.deltaTime;
+            transform.position += Vector3.ClampMagnitude(new Vector3(direction.x, direction.y, 0), 1);
+
+            foreach (FiringPointController point in firingPoints)
             {
-                point.Fire();
+                if (firing && point.pointCanShoot())
+                {
+                    point.Fire();
+                }
             }
         }
-        
-        //if (hp <= 0)
-        //{
-        //    Messenger.Broadcast(GameEvent.PLAYER_DEAD);
-        //    Debug.Log("player hit");
-        //}
+    }
+
+    public void Respawn()
+    {
+        transform.position = new Vector3(cam.transform.position.x - 1.8571f, cam.transform.position.y - 10, transform.position.z);
+        StartCoroutine(MoveIntoView());
+    }
+
+    IEnumerator MoveIntoView()
+    {
+        yield return new WaitForSecondsRealtime(2);
+        float timeElapsed = 0;
+        float durationPerMove = 1;
+
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition + new Vector2(0f, 12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        this.isDead = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("EnemyBullet"))
+        if (other.CompareTag("EnemyBullet") && !this.isDead)
         {
+            this.isDead = true;
             Debug.Log("hit player");
             Messenger.Broadcast(GameEvent.PLAYER_DEAD);
             Destroy(other.gameObject);
         }
     }
 
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("hit");
-        if (other.CompareTag("EnemyBullet"))
-        {
-            hp -= 1;
-            Destroy(other.gameObject);
-        }
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Debug.Log("wow");
-    }
 }

@@ -73,7 +73,7 @@ public class EnemyController : MonoBehaviour
         float screenBuffer = 0.1f; // the area on edge of screen where an enemy might be, but shouldn't be shooting from
         if (
             positionRelativeToCamera.x > 0 + screenBuffer && 
-            positionRelativeToCamera.x < 0.75 - screenBuffer &&
+            positionRelativeToCamera.x < 0.8 - screenBuffer &&
             positionRelativeToCamera.y > 0 + screenBuffer &&
             positionRelativeToCamera.y < 1 - screenBuffer
         )
