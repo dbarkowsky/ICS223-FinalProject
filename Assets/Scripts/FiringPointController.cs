@@ -7,7 +7,13 @@ public enum FiringPattern
 {
     SingleShot,
     TripleShot,
-    TripleSpread
+    TripleSpread,
+    VSpread,
+    Spiral,
+    DoubleSpiral,
+    FullScreenSpread,
+    Burst,
+    SingleShotAtPlayer
 }
 
 public class FiringPointController : MonoBehaviour
@@ -17,6 +23,9 @@ public class FiringPointController : MonoBehaviour
     public bool isActive = true;
     private bool canShoot = true; // used to handle cooldown between shots
     [SerializeField] float cooldown = 0.125f;
+    [SerializeField] int repetitions = 1;
+    private Vector2 playerPosition;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +36,21 @@ public class FiringPointController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void Awake()
+    {
+        Messenger<Vector2>.AddListener(GameEvent.PLAYER_LOCATION, OnPlayerLocationReceived);
+    }
+
+    private void OnDestroy()
+    {
+        Messenger<Vector2>.RemoveListener(GameEvent.PLAYER_LOCATION, OnPlayerLocationReceived);
+    }
+
+    private void OnPlayerLocationReceived(Vector2 playerPosition)
+    {
+        this.playerPosition = playerPosition;
     }
 
     public void Fire()
@@ -41,7 +65,25 @@ public class FiringPointController : MonoBehaviour
                 break;
             case FiringPattern.TripleSpread:
                 StartCoroutine(TripleSpread());
-                break;  
+                break;
+            case FiringPattern.VSpread:
+                StartCoroutine(VSpread());
+                break;
+            case FiringPattern.Spiral:
+                StartCoroutine(Spiral());
+                break;
+            case FiringPattern.DoubleSpiral:
+                StartCoroutine(DoubleSpiral());
+                break;
+            case FiringPattern.FullScreenSpread:
+                StartCoroutine(FullScreenSpread());
+                break;
+            case FiringPattern.Burst:
+                StartCoroutine(Burst());
+                break;
+            case FiringPattern.SingleShotAtPlayer:
+                StartCoroutine(SingleShotAtPlayer());
+                break;
             default:
                 break;
         }
@@ -89,6 +131,108 @@ public class FiringPointController : MonoBehaviour
         bullet2.GetComponent<BulletController>().SetAngle(spread);
         GameObject bullet3 = Instantiate(bullet, pos, rotation);
         bullet3.GetComponent<BulletController>().SetAngle(360-spread);
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator VSpread()
+    {
+        float spread = 35f;
+        canShoot = false;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        // Have to make separate instances here, or it functions like a shallow copy
+        GameObject bullet2 = Instantiate(bullet, pos, rotation);
+        bullet2.GetComponent<BulletController>().SetAngle(spread);
+        GameObject bullet3 = Instantiate(bullet, pos, rotation);
+        bullet3.GetComponent<BulletController>().SetAngle(360 - spread);
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator Spiral()
+    {
+        canShoot = false;
+        float secondsBetweenBullets = 0.125f;
+        int projectileSpreadDegrees = 25;
+        int projectilesPerRotation = 360 / projectileSpreadDegrees;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        for (int round = 0; round < repetitions; round++)
+        {
+            for (int projectile = 0; projectile < projectilesPerRotation; projectile++)
+            {
+                GameObject newBullet = Instantiate(bullet, pos, rotation);
+                newBullet.GetComponent<BulletController>().SetAngle(projectile * projectileSpreadDegrees);
+                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            }
+        }
+        yield return new WaitForSecondsRealtime(cooldown); 
+        canShoot = true;
+    }
+
+    private IEnumerator DoubleSpiral()
+    {
+        canShoot = false;
+        float secondsBetweenBullets = 0.3f;
+        int projectileSpreadDegrees = 30;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        for (int round = 0; round < repetitions; round++)
+        {
+            GameObject bullet1 = Instantiate(bullet, pos, rotation);
+            bullet1.GetComponent<BulletController>().SetAngle((round * projectileSpreadDegrees) % 360);
+            GameObject bullet2 = Instantiate(bullet, pos, rotation);
+            bullet2.GetComponent<BulletController>().SetAngle(((round * projectileSpreadDegrees) + 180) % 360);
+            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+        }
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator FullScreenSpread()
+    {
+        canShoot = false;
+        float secondsBetweenBullets = 0.5f;
+        int projectileSpreadDegrees = 60;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        for (int round = 0; round < repetitions; round++)
+        {
+            GameObject bullet1 = Instantiate(bullet, pos, rotation);
+            bullet1.GetComponent<BulletController>().SetAngle((round * projectileSpreadDegrees) % 360);
+            GameObject bullet2 = Instantiate(bullet, pos, rotation);
+            bullet2.GetComponent<BulletController>().SetAngle(((round * projectileSpreadDegrees) + 180) % 360);
+            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+        }
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator Burst()
+    {
+        canShoot = false;
+        float secondsBetweenBullets = 0.1f;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        for (int round = 0; round < repetitions; round++)
+        {
+            GameObject bullet1 = Instantiate(bullet, pos, rotation);
+            bullet1.GetComponent<BulletController>().SetAngle(0);
+            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+        }
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator SingleShotAtPlayer()
+    {
+        canShoot = false;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        Vector2 points2DPosition = new Vector2(pos.x, pos.y);
+        GameObject bullet1 = Instantiate(bullet, pos, rotation);
+        bullet1.GetComponent<BulletController>().SetAngle(Vector2.Angle(points2DPosition, playerPosition) + 180);
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
     }

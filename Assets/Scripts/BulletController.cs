@@ -120,12 +120,4 @@ public class BulletController : MonoBehaviour
         float radians = (Mathf.PI / 180) * degrees;
         return (radians);
     }
-
-    //private void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    if ((other.CompareTag("Player") && type == BulletType.Enemy) || (other.CompareTag("Enemy") && type == BulletType.Player))
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
 }

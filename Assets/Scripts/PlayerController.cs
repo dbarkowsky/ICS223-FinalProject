@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
         float yMove = Input.GetAxis("Vertical");
         bool firing = Input.GetButton("Fire");
 
+        // Player control loop
         if (!isDead)
         {
             // don't let player leave view!

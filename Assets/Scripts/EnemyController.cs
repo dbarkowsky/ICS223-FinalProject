@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum MovementPatterns
 {
+    Stationary,
     CurveFromRight,
     CurveFromLeft,
     DropDownPauseContinue,
@@ -36,6 +37,8 @@ public class EnemyController : MonoBehaviour
         {
             case MovementPatterns.DropDownPauseContinue:
                 StartCoroutine(FlyDown_Pause_FlyDown());
+                break;
+            case MovementPatterns.Stationary:
                 break;
             default:
                 break;
@@ -123,5 +126,4 @@ public class EnemyController : MonoBehaviour
             yield return null;
         }
     }
-
 }

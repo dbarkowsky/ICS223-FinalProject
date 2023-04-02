@@ -39,6 +39,7 @@ public class EnemyManager : MonoBehaviour
     private void OnDestroy()
     {
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
+        Messenger<int>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
     private void OnEnemyTriggerReached(int triggerID)
