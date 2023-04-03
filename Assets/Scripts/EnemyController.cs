@@ -6,24 +6,22 @@ using UnityEngine;
 public enum MovementPatterns
 {
     Stationary,
-    CurveFromRight,
-    CurveFromLeft,
+    StationaryLand,
+    EnterFromRight,
+    EnterFromLeft,
     DropDownPauseContinue,
     MoveDownSlowly,
-    DropDownWiggle
+    DropDownWiggleContinue,
+    DropDownFloatUp
 }
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private MovementPatterns movementPattern;
+    [SerializeField] private float pauseDuration = 1f;
+    [SerializeField] private float moveDuration = 2f;
     private BoxCollider2D collider;
-    private float speed = 5f;
-    Vector2 pausePos = new Vector2(-6.5f, 0f);
-    Vector2 endPos = new Vector2(-6.5f, -15f);
-    Transform from;
-    Transform to;
-    float timeCount = 0.0f;
-    private bool canShoot = true;
+    private bool enemyCanShoot = true;
 
     [SerializeField] FiringPointController[] firingPoints;
     FiringPointController mainFiringPoint;
@@ -35,10 +33,28 @@ public class EnemyController : MonoBehaviour
         mainFiringPoint = firingPoints[0];
         switch (movementPattern)
         {
-            case MovementPatterns.DropDownPauseContinue:
-                StartCoroutine(FlyDown_Pause_FlyDown());
-                break;
             case MovementPatterns.Stationary:
+                break;
+            case MovementPatterns.StationaryLand:
+                StartCoroutine(StationaryLand());
+                break;
+            case MovementPatterns.DropDownPauseContinue:
+                StartCoroutine(DropDownPauseContinue());
+                break;
+            case MovementPatterns.DropDownWiggleContinue:
+                StartCoroutine(DropDownWiggleContinue());
+                break;
+            case MovementPatterns.MoveDownSlowly:
+                StartCoroutine(MoveDownSlowly());
+                break;
+            case MovementPatterns.DropDownFloatUp:
+                StartCoroutine(DropDownFloatUp());
+                break;
+            case MovementPatterns.EnterFromRight:
+                StartCoroutine(EnterFromRight());
+                break;
+            case MovementPatterns.EnterFromLeft:
+                StartCoroutine(EnterFromLeft());
                 break;
             default:
                 break;
@@ -50,7 +66,7 @@ public class EnemyController : MonoBehaviour
     {
         foreach (FiringPointController point in firingPoints)
         {
-            if (point.pointCanShoot() && canShoot)
+            if (point.pointCanShoot() && enemyCanShoot)
             {
                 point.Fire();
             }
@@ -62,7 +78,7 @@ public class EnemyController : MonoBehaviour
         if (other.CompareTag("PlayerBullet"))
         {
             Debug.Log("enemy hit");
-            Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+            Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
             Destroy(other.gameObject);
         }
     }
@@ -81,11 +97,17 @@ public class EnemyController : MonoBehaviour
             positionRelativeToCamera.y < 1 - screenBuffer
         )
         {
-            canShoot = true;
+            StartCoroutine(CanShootSoon());
         } else
         {
-            canShoot = false;
+            enemyCanShoot = false;
         }
+    }
+
+    private IEnumerator CanShootSoon()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        enemyCanShoot = true;
     }
 
     // Is this enemy below the screen? Delete it
@@ -102,10 +124,145 @@ public class EnemyController : MonoBehaviour
     }
 
     // All movement patterns go here:
-    IEnumerator FlyDown_Pause_FlyDown()
+
+    IEnumerator StationaryLand()
+    {
+        while (true)
+        {
+            transform.position = new Vector2(transform.position.x, transform.position.y - Constants.scrollSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
+    IEnumerator DropDownPauseContinue()
     {
         float timeElapsed = 0;
-        float durationPerMove = 2;
+        float durationPerMove = moveDuration;
+
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 4f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitForSecondsRealtime(pauseDuration);
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator EnterFromRight()
+    {
+        float timeElapsed = 0;
+        float durationPerMove = moveDuration;
+
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(3.5f, 0f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        // Rotate
+        float duration = 0.5f;
+        float t = 0;
+        Quaternion startRotation = transform.rotation;
+        float endZRot = 45f;
+
+        while (t < 1f)
+        {
+            t = Mathf.Min(1f, t + Time.deltaTime / duration);
+            Vector3 newEulerOffset = Vector3.forward * (endZRot * t);
+            // global z rotation
+            transform.rotation = Quaternion.Euler(newEulerOffset) * startRotation;
+            yield return null;
+        }
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(12f, 12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator EnterFromLeft()
+    {
+        float timeElapsed = 0;
+        float durationPerMove = moveDuration;
+
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(-3.5f, 0f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        // Rotate
+        float duration = 0.5f;
+        float t = 0;
+        Quaternion startRotation = transform.rotation;
+        float endZRot = -45f;
+
+        while (t < 1f)
+        {
+            t = Mathf.Min(1f, t + Time.deltaTime / duration);
+            Vector3 newEulerOffset = Vector3.forward * (endZRot * t);
+            // global z rotation
+            transform.rotation = Quaternion.Euler(newEulerOffset) * startRotation;
+            yield return null;
+        }
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(-12f, 12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator DropDownFloatUp()
+    {
+        float timeElapsed = 0;
+        float durationPerMove = moveDuration;
+
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 5f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, -12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
+    }
+
+    IEnumerator DropDownWiggleContinue()
+    {
+        float timeElapsed = 0;
+        float durationPerMove = moveDuration;
 
         while (timeElapsed < durationPerMove)
         {
@@ -115,7 +272,33 @@ public class EnemyController : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        yield return new WaitForSecondsRealtime(1);
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(1f, 0f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(-2f, 0f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        timeElapsed = 0;
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(1f, 0f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
         timeElapsed = 0;
         while (timeElapsed < durationPerMove)
         {
@@ -123,6 +306,15 @@ public class EnemyController : MonoBehaviour
             float time = timeElapsed / durationPerMove;
             transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 12f), time * Time.deltaTime);
             timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private IEnumerator MoveDownSlowly()
+    {
+        while (true)
+        {
+            transform.position = new Vector2(transform.position.x, transform.position.y - 0.005f);
             yield return null;
         }
     }

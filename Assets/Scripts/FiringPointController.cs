@@ -14,7 +14,8 @@ public enum FiringPattern
     FullScreenSpread,
     Burst,
     SingleShotAtPlayer,
-    BurstAtPlayer
+    BurstAtPlayer,
+    Pulse
 }
 
 public class FiringPointController : MonoBehaviour
@@ -88,6 +89,9 @@ public class FiringPointController : MonoBehaviour
             case FiringPattern.BurstAtPlayer:
                 StartCoroutine(BurstAtPlayer());
                 break;
+            case FiringPattern.Pulse:
+                StartCoroutine(Pulse());
+                break;
             default:
                 break;
         }
@@ -160,12 +164,12 @@ public class FiringPointController : MonoBehaviour
         float secondsBetweenBullets = 0.125f;
         int projectileSpreadDegrees = 25;
         int projectilesPerRotation = 360 / projectileSpreadDegrees;
-        Vector3 pos = transform.position;
-        Quaternion rotation = transform.rotation;
         for (int round = 0; round < repetitions; round++)
         {
             for (int projectile = 0; projectile < projectilesPerRotation; projectile++)
             {
+                Vector3 pos = transform.position;
+                Quaternion rotation = transform.rotation;
                 GameObject newBullet = Instantiate(bullet, pos, rotation);
                 newBullet.GetComponent<BulletController>().SetAngle(projectile * projectileSpreadDegrees);
                 yield return new WaitForSecondsRealtime(secondsBetweenBullets);
@@ -180,10 +184,10 @@ public class FiringPointController : MonoBehaviour
         canShoot = false;
         float secondsBetweenBullets = 0.3f;
         int projectileSpreadDegrees = 30;
-        Vector3 pos = transform.position;
-        Quaternion rotation = transform.rotation;
         for (int round = 0; round < repetitions; round++)
         {
+            Vector3 pos = transform.position;
+            Quaternion rotation = transform.rotation;
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle((round * projectileSpreadDegrees) % 360);
             GameObject bullet2 = Instantiate(bullet, pos, rotation);
@@ -199,10 +203,10 @@ public class FiringPointController : MonoBehaviour
         canShoot = false;
         float secondsBetweenBullets = 0.5f;
         int projectileSpreadDegrees = 60;
-        Vector3 pos = transform.position;
-        Quaternion rotation = transform.rotation;
         for (int round = 0; round < repetitions; round++)
         {
+            Vector3 pos = transform.position;
+            Quaternion rotation = transform.rotation;
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle((round * projectileSpreadDegrees) % 360);
             GameObject bullet2 = Instantiate(bullet, pos, rotation);
@@ -213,14 +217,33 @@ public class FiringPointController : MonoBehaviour
         canShoot = true;
     }
 
+    private IEnumerator Pulse()
+    {
+        canShoot = false;
+        int projectileSpreadDegrees = 25;
+        int projectilesPerRotation = 360 / projectileSpreadDegrees;
+        for (int round = 0; round < repetitions; round++)
+        {
+            for (int projectile = 0; projectile < projectilesPerRotation; projectile++)
+            {
+                Vector3 pos = transform.position;
+                Quaternion rotation = transform.rotation;
+                GameObject newBullet = Instantiate(bullet, pos, rotation);
+                newBullet.GetComponent<BulletController>().SetAngle(projectile * projectileSpreadDegrees);
+            }
+        }
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
     private IEnumerator Burst()
     {
         canShoot = false;
         float secondsBetweenBullets = 0.1f;
-        Vector3 pos = transform.position;
-        Quaternion rotation = transform.rotation;
         for (int round = 0; round < repetitions; round++)
         {
+            Vector3 pos = transform.position;
+            Quaternion rotation = transform.rotation;
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle(0);
             yield return new WaitForSecondsRealtime(secondsBetweenBullets);
@@ -245,10 +268,10 @@ public class FiringPointController : MonoBehaviour
     {
         canShoot = false;
         float secondsBetweenBullets = 0.1f;
-        Vector3 pos = transform.position;
-        Quaternion rotation = transform.rotation;
         for (int round = 0; round < repetitions; round++)
         {
+            Vector3 pos = transform.position;
+            Quaternion rotation = transform.rotation;
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
             yield return new WaitForSecondsRealtime(secondsBetweenBullets);

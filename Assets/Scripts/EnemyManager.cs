@@ -33,25 +33,34 @@ public class EnemyManager : MonoBehaviour
     private void Awake()
     {
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
+        Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyedSelf);
         Messenger<int>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
     private void OnDestroy()
     {
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
+        Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyedSelf);
         Messenger<int>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
     private void OnEnemyTriggerReached(int triggerID)
     {
         Debug.Log(triggerID.ToString());
+        int spawnPoint;
         switch (triggerID)
         {
             case 0:
-                int spawnPoint = Random.Range(3, 7);
+                spawnPoint = Random.Range(3, 7);
                 GameObject enemy = Instantiate(enemyPrefabs[0], this.transform);
                 enemy.transform.position = spawnPoints[spawnPoint].transform.position;
                 enemies.Add(enemy);
+                break;
+            case 1:
+                spawnPoint = 3;
+                GameObject enemy1 = Instantiate(enemyPrefabs[1], this.transform);
+                enemy1.transform.position = spawnPoints[spawnPoint].transform.position;
+                enemies.Add(enemy1);
                 break;
             default:
                 break;
@@ -63,6 +72,15 @@ public class EnemyManager : MonoBehaviour
         if (enemy != null)
         {
             Debug.Log(this + " Enemy destroyed.");
+            DestroyEnemy(enemy);
+        }
+    }
+
+    private void OnEnemyDestroyedSelf(GameObject enemy)
+    {
+        if (enemy != null)
+        {
+            Debug.Log(this + " Enemy destroyed self.");
             DestroyEnemy(enemy);
         }
     }
