@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    private enum EnemyPrefabs
+    {
+        GoldfishDownUp,
+        GoldfishLeft,
+        GoldfishRight,
+        Barnacle,
+        Anenome,
+        Octopus,
+        Jellyfish,
+        StingRay,
+        Manta,
+        Narwhal,
+        Orca,
+        Turtle
+    }
     private List<GameObject> enemies = new List<GameObject>();
     [SerializeField] private List<GameObject> spawnPoints;
     [SerializeField] private List<GameObject> enemyPrefabs;
@@ -34,33 +49,28 @@ public class EnemyManager : MonoBehaviour
     {
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyedSelf);
-        Messenger<int>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
+        Messenger<TriggerType>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
     private void OnDestroy()
     {
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyedSelf);
-        Messenger<int>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
+        Messenger<TriggerType>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
-    private void OnEnemyTriggerReached(int triggerID)
+    private void OnEnemyTriggerReached(TriggerType triggerType)
     {
-        Debug.Log(triggerID.ToString());
-        int spawnPoint;
-        switch (triggerID)
+        switch (triggerType)
         {
-            case 0:
-                spawnPoint = Random.Range(3, 7);
-                GameObject enemy = Instantiate(enemyPrefabs[0], this.transform);
-                enemy.transform.position = spawnPoints[spawnPoint].transform.position;
-                enemies.Add(enemy);
+            case TriggerType.SingleOrca:
+                StartCoroutine(SingleOrca());
                 break;
-            case 1:
-                spawnPoint = 3;
-                GameObject enemy1 = Instantiate(enemyPrefabs[1], this.transform);
-                enemy1.transform.position = spawnPoints[spawnPoint].transform.position;
-                enemies.Add(enemy1);
+            case TriggerType.TwoMantas:
+                StartCoroutine(TwoMantas());
+                break;
+            case TriggerType.ThreeGoldfishTop:
+                StartCoroutine(ThreeGoldfish());
                 break;
             default:
                 break;
@@ -89,5 +99,42 @@ public class EnemyManager : MonoBehaviour
     {
         enemies.RemoveAt(enemies.IndexOf(enemy));
         Destroy(enemy);
+    }
+
+    // Enemy spawning scripts
+    IEnumerator SingleOrca()
+    {
+        int spawnPoint;
+        spawnPoint = Random.Range(3, 7);
+        GameObject enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.Orca], this.transform);
+        enemy.transform.position = spawnPoints[spawnPoint].transform.position;
+        enemies.Add(enemy);
+        yield return null;
+    }
+
+    IEnumerator TwoMantas()
+    {
+        GameObject enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.Manta], this.transform);
+        enemy.transform.position = spawnPoints[3].transform.position;
+        enemies.Add(enemy);
+        enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.Manta], this.transform);
+        enemy.transform.position = spawnPoints[5].transform.position;
+        enemies.Add(enemy);
+        yield return null;
+    }
+
+    IEnumerator ThreeGoldfish()
+    {
+        GameObject enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
+        enemy.transform.position = spawnPoints[Random.Range(3, 7)].transform.position;
+        enemies.Add(enemy);
+        yield return new WaitForSecondsRealtime(0.5f);
+        enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
+        enemy.transform.position = spawnPoints[Random.Range(3, 7)].transform.position;
+        enemies.Add(enemy);
+        yield return new WaitForSecondsRealtime(0.5f);
+        enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
+        enemy.transform.position = spawnPoints[Random.Range(3, 7)].transform.position;
+        enemies.Add(enemy);
     }
 }
