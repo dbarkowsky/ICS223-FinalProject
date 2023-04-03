@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3793014722739832214}
   - component: {fileID: -3094067707420548430}
   m_Layer: 0
-  m_Name: Large_DropDown_Spread
+  m_Name: GoldfishLeft
   m_TagString: EnemyAir
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementPattern: 3
+  pauseDuration: 1
+  moveDuration: 2
   firingPoints:
   - {fileID: 3194270873056530978}
 --- !u!61 &3793014722739832214
@@ -236,7 +238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: pattern
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: cooldown

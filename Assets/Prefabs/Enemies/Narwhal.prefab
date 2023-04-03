@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3793014722739832214}
   - component: {fileID: -3094067707420548430}
   m_Layer: 0
-  m_Name: Large_Stationary_Spiral
+  m_Name: Narwhal
   m_TagString: EnemyAir
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c48b27e4f6f2fe4b81c6318d1c7d1c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementPattern: 0
+  movementPattern: 6
+  pauseDuration: 1
+  moveDuration: 2
   firingPoints:
   - {fileID: 3194270873056530978}
 --- !u!61 &3793014722739832214
@@ -236,15 +238,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: pattern
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: cooldown
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
-      propertyPath: repetitions
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345101, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: m_Name
