@@ -232,8 +232,69 @@ public class FiringPointController : MonoBehaviour
         Quaternion rotation = transform.rotation;
         Vector2 points2DPosition = new Vector2(pos.x, pos.y);
         GameObject bullet1 = Instantiate(bullet, pos, rotation);
-        bullet1.GetComponent<BulletController>().SetAngle(Vector2.Angle(points2DPosition, playerPosition) + 180);
+        bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
+    }
+
+    private float GetAngleToPlayer()
+    {
+        float absoluteAngle;
+        float near;
+        float far;
+        float xDifference = playerPosition.x - transform.position.x;
+        float yDifference = playerPosition.y - transform.position.y;
+        // First 4 directions, then in between
+        if (xDifference == 0 && yDifference > 0)
+        {
+            // straight forward, 0 degrees
+            absoluteAngle = 0f;
+        } else if (xDifference == 0 && yDifference < 0)
+        {
+            // straight back, 180 degress
+            absoluteAngle = 180f;
+        } else if (yDifference == 0 && xDifference < 0)
+        {
+            // straight left, 270 degrees
+            absoluteAngle = 270f;
+        }
+        else if (yDifference == 0 && xDifference > 0)
+        {
+            // straight right, 90 degrees
+            absoluteAngle = 90f;
+        }
+        // In between directions
+        else if (xDifference > 0 && yDifference > 0)
+        {
+            // between 0 and 90 degrees
+            far = Mathf.Abs(xDifference);
+            near = Mathf.Abs(yDifference);
+            absoluteAngle = ConvertRadiansToDegrees(Mathf.Atan2(far, near));
+        } else if (xDifference > 0 && yDifference < 0)
+        {
+            // between 90 and 180 degrees
+            far = Mathf.Abs(yDifference);
+            near = Mathf.Abs(xDifference);
+            absoluteAngle = ConvertRadiansToDegrees(Mathf.Atan2(far, near)) + 90;
+        } else if (xDifference < 0 && yDifference < 0)
+        {
+            // between 180 and 270 degrees
+            far = Mathf.Abs(xDifference);
+            near = Mathf.Abs(yDifference);
+            absoluteAngle = ConvertRadiansToDegrees(Mathf.Atan2(far, near)) + 180;
+        } else
+        {
+            // between 270 and 360 degrees
+            far = Mathf.Abs(yDifference);
+            near = Mathf.Abs(xDifference);
+            absoluteAngle = ConvertRadiansToDegrees(Mathf.Atan2(far, near)) + 270;
+        }
+        return (absoluteAngle + 180) % 360; // because otherwise it fires the wrong way...
+    }
+
+    private float ConvertRadiansToDegrees(float radians)
+    {
+        // Angle in Radians × 180°/ ?
+        return (radians * (180 / Mathf.PI));
     }
 }
