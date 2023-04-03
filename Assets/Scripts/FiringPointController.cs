@@ -13,7 +13,8 @@ public enum FiringPattern
     DoubleSpiral,
     FullScreenSpread,
     Burst,
-    SingleShotAtPlayer
+    SingleShotAtPlayer,
+    BurstAtPlayer
 }
 
 public class FiringPointController : MonoBehaviour
@@ -83,6 +84,9 @@ public class FiringPointController : MonoBehaviour
                 break;
             case FiringPattern.SingleShotAtPlayer:
                 StartCoroutine(SingleShotAtPlayer());
+                break;
+            case FiringPattern.BurstAtPlayer:
+                StartCoroutine(BurstAtPlayer());
                 break;
             default:
                 break;
@@ -233,6 +237,22 @@ public class FiringPointController : MonoBehaviour
         Vector2 points2DPosition = new Vector2(pos.x, pos.y);
         GameObject bullet1 = Instantiate(bullet, pos, rotation);
         bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator BurstAtPlayer()
+    {
+        canShoot = false;
+        float secondsBetweenBullets = 0.1f;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        for (int round = 0; round < repetitions; round++)
+        {
+            GameObject bullet1 = Instantiate(bullet, pos, rotation);
+            bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
+            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+        }
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
     }

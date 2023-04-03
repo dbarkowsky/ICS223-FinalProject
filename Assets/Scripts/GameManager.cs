@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
         {
             Vector2 playerCoordinates = new Vector2(player.transform.position.x, player.transform.position.y);
             Messenger<Vector2>.Broadcast(GameEvent.PLAYER_LOCATION, playerCoordinates);
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
 
