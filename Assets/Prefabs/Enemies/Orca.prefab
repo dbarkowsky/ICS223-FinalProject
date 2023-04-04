@@ -51,6 +51,8 @@ MonoBehaviour:
   movementPattern: 6
   pauseDuration: 1
   moveDuration: 2
+  scoreValue: 100
+  hp: 10
   firingPoints:
   - {fileID: 3194270873056530978}
 --- !u!61 &3793014722739832214

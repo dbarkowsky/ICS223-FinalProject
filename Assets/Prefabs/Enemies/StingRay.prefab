@@ -52,6 +52,8 @@ MonoBehaviour:
   movementPattern: 4
   pauseDuration: 1
   moveDuration: 2
+  scoreValue: 50
+  hp: 5
   firingPoints:
   - {fileID: 3194270873056530978}
   - {fileID: 1786093127013480019}

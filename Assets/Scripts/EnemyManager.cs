@@ -105,6 +105,9 @@ public class EnemyManager : MonoBehaviour
             case TriggerType.ThreeGoldfishTop:
                 StartCoroutine(ThreeGoldfish());
                 break;
+            case TriggerType.GoldfishWave:
+                StartCoroutine(GoldfishWave());
+                break;
             default:
                 break;
         }
@@ -269,5 +272,22 @@ public class EnemyManager : MonoBehaviour
         enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
         enemy.transform.position = spawnPoints[Random.Range(4, 6)].transform.position;
         enemies.Add(enemy);
+    }
+
+    IEnumerator GoldfishWave()
+    {
+        GameObject enemy;
+        int firstLeftSpawn = 2;
+        int firstRightSpawn = 7;
+        for (int i = 0; i < 3; i++)
+        {
+            enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishLeft], this.transform);
+            enemy.transform.position = spawnPoints[firstLeftSpawn - i].transform.position;
+            enemies.Add(enemy);
+            enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishRight], this.transform);
+            enemy.transform.position = spawnPoints[firstRightSpawn + i].transform.position;
+            enemies.Add(enemy);
+            yield return new WaitForSecondsRealtime(0.7f);
+        }
     }
 }

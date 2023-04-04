@@ -18,6 +18,7 @@ public enum TriggerType
     SingleNarwhal,
     TwoMantas,
     ThreeGoldfishTop,
+    GoldfishWave
 }
 public class EnemyTrigger : MonoBehaviour
 {

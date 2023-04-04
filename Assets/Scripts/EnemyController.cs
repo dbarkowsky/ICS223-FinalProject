@@ -20,6 +20,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private MovementPatterns movementPattern;
     [SerializeField] private float pauseDuration = 1f;
     [SerializeField] private float moveDuration = 2f;
+    [SerializeField] public uint scoreValue = 50;
+    [SerializeField] private int hp = 1;
     private BoxCollider2D collider;
     private bool enemyCanShoot = true;
 
@@ -77,9 +79,17 @@ public class EnemyController : MonoBehaviour
     {
         if (other.CompareTag("PlayerBullet"))
         {
-            Debug.Log("enemy hit");
-            Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
             Destroy(other.gameObject);
+            hp--;
+            if (hp <= 0)
+            {
+                Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+            }
+        }
+        if (other.CompareTag("Player"))
+        {
+            Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
+            Messenger.Broadcast(GameEvent.PLAYER_DEAD);
         }
     }
 

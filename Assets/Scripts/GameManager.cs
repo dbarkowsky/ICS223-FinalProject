@@ -33,7 +33,10 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerDead()
     {
-        player.Respawn();
+        if (player.canBeHit)
+        {
+            player.Respawn();
+        }
     }
 
     private IEnumerator BroadcastPlayerLocation()

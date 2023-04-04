@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     // Character attributes
     private bool isDead = false;
+    public bool canBeHit = true;
     
 
     // Start is called before the first frame update
@@ -74,6 +75,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator MoveIntoView()
     {
+        this.canBeHit = false;
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
         yield return new WaitForSecondsRealtime(2);
         float timeElapsed = 0;
         float durationPerMove = 1;
@@ -87,11 +90,16 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         this.isDead = false;
+        
+        yield return new WaitForSecondsRealtime(2);
+        Debug.Log("canbehit again");
+        this.canBeHit = true;
+        gameObject.GetComponent<CircleCollider2D>().enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("EnemyBullet") && !this.isDead)
+        if (other.CompareTag("EnemyBullet") && !this.isDead && this.canBeHit)
         {
             this.isDead = true;
             Debug.Log("hit player");

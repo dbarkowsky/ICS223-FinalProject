@@ -337,7 +337,7 @@ public class FiringPointController : MonoBehaviour
 
     private float ConvertRadiansToDegrees(float radians)
     {
-        // Angle in Radians × 180°/ ?
+        // Angle in Radians × 180°/ PI
         return (radians * (180 / Mathf.PI));
     }
 }
