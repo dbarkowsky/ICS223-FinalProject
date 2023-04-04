@@ -243,7 +243,7 @@ public class EnemyController : MonoBehaviour
         {
             Vector2 currentPosition = transform.position;
             float time = timeElapsed / durationPerMove;
-            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 5f), time * Time.deltaTime);
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 7f), time * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
@@ -268,7 +268,7 @@ public class EnemyController : MonoBehaviour
         {
             Vector2 currentPosition = transform.position;
             float time = timeElapsed / durationPerMove;
-            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 6f), time * Time.deltaTime);
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 4f), time * Time.deltaTime);
             timeElapsed += Time.deltaTime;
             yield return null;
         }

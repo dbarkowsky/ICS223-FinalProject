@@ -5,6 +5,17 @@ using UnityEngine;
 public enum TriggerType
 {
     SingleOrca,
+    SingleGoldfishTop,
+    SingleGoldfishLeft,
+    SingleGoldfishRight,
+    SingleJellyfish,
+    SingleOctopus,
+    SingleManta,
+    SingleAnenome,
+    SingleBarnacle,
+    SingleStingRay,
+    SingleTurtle,
+    SingleNarwhal,
     TwoMantas,
     ThreeGoldfishTop,
 }
