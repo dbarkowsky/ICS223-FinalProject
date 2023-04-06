@@ -49,14 +49,14 @@ public class EnemyManager : MonoBehaviour
     private void Awake()
     {
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
-        Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyedSelf);
+        Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyed);
         Messenger<TriggerType>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
     private void OnDestroy()
     {
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
-        Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyedSelf);
+        Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyed);
         Messenger<TriggerType>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
     }
 
@@ -123,16 +123,6 @@ public class EnemyManager : MonoBehaviour
             float explosionSize = enemy.GetComponent<EnemyController>().explosionSize;
             exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
             DestroyEnemy(enemy); 
-        }
-    }
-
-    private void OnEnemyDestroyedSelf(GameObject enemy)
-    {
-        if (enemy != null)
-        {
-            Debug.Log(this + " Enemy destroyed self.");
-            Instantiate(explosion, enemy.transform, true);
-            DestroyEnemy(enemy);
         }
     }
 
