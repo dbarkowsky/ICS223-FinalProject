@@ -21,6 +21,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float pauseDuration = 1f;
     [SerializeField] private float moveDuration = 2f;
     [SerializeField] public uint scoreValue = 50;
+    [SerializeField] public float explosionSize = 1f;
     [SerializeField] private int hp = 1;
     private BoxCollider2D collider;
     private bool enemyCanShoot = true;

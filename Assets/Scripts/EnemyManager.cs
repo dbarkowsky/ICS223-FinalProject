@@ -22,6 +22,7 @@ public class EnemyManager : MonoBehaviour
     private List<GameObject> enemies = new List<GameObject>();
     [SerializeField] private List<GameObject> spawnPoints;
     [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private GameObject explosion;
 
     [SerializeField] Camera cam;
 
@@ -118,7 +119,10 @@ public class EnemyManager : MonoBehaviour
         if (enemy != null)
         {
             Debug.Log(this + " Enemy destroyed.");
-            DestroyEnemy(enemy);
+            GameObject exp = Instantiate(explosion, enemy.transform.position + enemy.transform.localScale / 2, enemy.transform.rotation);
+            float explosionSize = enemy.GetComponent<EnemyController>().explosionSize;
+            exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
+            DestroyEnemy(enemy); 
         }
     }
 
@@ -127,6 +131,7 @@ public class EnemyManager : MonoBehaviour
         if (enemy != null)
         {
             Debug.Log(this + " Enemy destroyed self.");
+            Instantiate(explosion, enemy.transform, true);
             DestroyEnemy(enemy);
         }
     }

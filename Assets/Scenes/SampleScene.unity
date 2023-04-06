@@ -1476,6 +1476,7 @@ MonoBehaviour:
   - {fileID: 3793014722739832213, guid: acdb61c732a469a44b19e9b363d0d797, type: 3}
   - {fileID: 3793014722739832213, guid: 280d3f0920753d348a834ebbc89903fb, type: 3}
   - {fileID: 3793014722739832213, guid: 53443221849a26546b87db93721d3b90, type: 3}
+  explosion: {fileID: 8955877265678390800, guid: 0e5d4f5bde88ea44fa4517b2385208cb, type: 3}
   cam: {fileID: 519420031}
 --- !u!1 &1532200291
 GameObject:
@@ -1897,7 +1898,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5519990447865675032, guid: bbb2ea3977ff9654c9e20ac30bd21875, type: 3}
       propertyPath: triggerType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5519990447865675035, guid: bbb2ea3977ff9654c9e20ac30bd21875, type: 3}
       propertyPath: m_RootOrder
