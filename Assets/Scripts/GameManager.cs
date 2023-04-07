@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlayerController player;
     [SerializeField] GameObject background;
     [SerializeField] Camera cam;
-
-    private
+    [SerializeField] GameObject explosion;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     {
         if (player.canBeHit)
         {
+            GameObject exp = Instantiate(explosion, player.transform.position, player.transform.rotation);
+            exp.transform.localScale = new Vector3(1, 1, 1);
             player.Respawn();
         }
     }

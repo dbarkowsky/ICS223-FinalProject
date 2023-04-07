@@ -8,7 +8,7 @@ using static UnityEngine.GraphicsBuffer;
 public class PlayerController : MonoBehaviour
 {
     // Character control
-    private float speed = 8f;
+    private float speed = 5f;
 
     // Character shooting
     [SerializeField] FiringPointController[] firingPoints;
@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     // Character attributes
     private bool isDead = false;
     public bool canBeHit = true;
+
+    // Animation Controller
+    [SerializeField] Animator anim;
     
 
     // Start is called before the first frame update
@@ -46,6 +49,8 @@ public class PlayerController : MonoBehaviour
         // Player control loop
         if (!isDead)
         {
+            // Change animation
+            anim.SetFloat("xDirection", xMove);
             // don't let player leave view!
             // bottom left is [0,0], top right is [1,1]
             Vector3 positionRelativeToCamera = cam.WorldToViewportPoint(transform.position);
