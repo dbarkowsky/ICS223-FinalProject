@@ -55,6 +55,11 @@ public class FiringPointController : MonoBehaviour
         this.playerPosition = playerPosition;
     }
 
+    public void SetPattern(FiringPattern newPattern)
+    {
+        pattern = newPattern;
+    }
+
     public void Fire()
     {
         switch (pattern)
@@ -135,8 +140,10 @@ public class FiringPointController : MonoBehaviour
         // Have to make separate instances here, or it functions like a shallow copy
         GameObject bullet1 = Instantiate(bullet, pos, rotation);
         bullet1.GetComponent<BulletController>().SetAngle(0);
+        rotation.z += 2.5f;
         GameObject bullet2 = Instantiate(bullet, pos, rotation);
         bullet2.GetComponent<BulletController>().SetAngle(spread);
+        rotation.z -= 5f;
         GameObject bullet3 = Instantiate(bullet, pos, rotation);
         bullet3.GetComponent<BulletController>().SetAngle(360-spread);
         yield return new WaitForSecondsRealtime(cooldown);

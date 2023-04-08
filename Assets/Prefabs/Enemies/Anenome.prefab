@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3094067707420548430}
   m_Layer: 0
   m_Name: Anenome
-  m_TagString: EnemyAir
+  m_TagString: EnemyLand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

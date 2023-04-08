@@ -82,16 +82,25 @@ public class EnemyController : MonoBehaviour
         {
             Destroy(other.gameObject);
             hp--;
+            StartCoroutine(StrobeOnHit());
             if (hp <= 0)
             {
                 Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
             }
         }
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && this.CompareTag("EnemyAir"))
         {
             Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
             Messenger.Broadcast(GameEvent.PLAYER_DEAD);
         }
+    }
+
+    IEnumerator StrobeOnHit()
+    {
+        SpriteRenderer sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
+        sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 0.5f);
+        yield return new WaitForSecondsRealtime(0.1f);
+        sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f);
     }
 
     // Given a camera, determines if the enemy is visible on screen and sets their ability to shoot

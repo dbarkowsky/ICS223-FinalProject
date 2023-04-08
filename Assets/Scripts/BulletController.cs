@@ -27,7 +27,10 @@ public class BulletController : MonoBehaviour
     void Update()
     {
         transform.position += (direction * speed * Time.deltaTime);
-        transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);// Quaternion.Euler(Vector3.forward * rotateSpeed * Time.deltaTime);
+        if (type == BulletType.Enemy)
+        {
+            transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);// Quaternion.Euler(Vector3.forward * rotateSpeed * Time.deltaTime);
+        }
         StartCoroutine(DestroyMe());
     }
 

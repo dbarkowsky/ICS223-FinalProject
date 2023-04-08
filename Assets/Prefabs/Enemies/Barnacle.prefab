@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3094067707420548430}
   m_Layer: 0
   m_Name: Barnacle
-  m_TagString: EnemyAir
+  m_TagString: EnemyLand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -245,7 +245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: cooldown
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345101, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: m_Name

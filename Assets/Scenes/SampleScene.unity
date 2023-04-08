@@ -1894,6 +1894,10 @@ PrefabInstance:
       value: EnemyTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 5519990447865675032, guid: bbb2ea3977ff9654c9e20ac30bd21875, type: 3}
+      propertyPath: cooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5519990447865675032, guid: bbb2ea3977ff9654c9e20ac30bd21875, type: 3}
       propertyPath: repetitions
       value: 1
       objectReference: {fileID: 0}
@@ -2008,6 +2012,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 7975165358708922004, guid: 7a712ebc0f97ede45a5821038f237165, type: 3}
+      propertyPath: pattern
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a712ebc0f97ede45a5821038f237165, type: 3}
