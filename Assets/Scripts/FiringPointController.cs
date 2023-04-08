@@ -7,6 +7,7 @@ public enum FiringPattern
 {
     SingleShot,
     TripleShot,
+    Focus,
     TripleSpread,
     VSpread,
     Spiral,
@@ -60,6 +61,11 @@ public class FiringPointController : MonoBehaviour
         pattern = newPattern;
     }
 
+    public void AdjustCooldown(float delta)
+    {
+        cooldown += delta;
+    }
+
     public void Fire()
     {
         switch (pattern)
@@ -69,6 +75,9 @@ public class FiringPointController : MonoBehaviour
                 break;
             case FiringPattern.TripleShot:
                 StartCoroutine(TripleShot());
+                break;
+            case FiringPattern.Focus:
+                StartCoroutine(Focus());
                 break;
             case FiringPattern.TripleSpread:
                 StartCoroutine(TripleSpread());
@@ -115,6 +124,18 @@ public class FiringPointController : MonoBehaviour
         Quaternion rotation = transform.rotation;
         Instantiate(bullet, pos, rotation);
         yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator Focus()
+    {
+        canShoot = false;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        float bulletOffset = 0.25f;
+        Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation);
+        Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation);
+        yield return new WaitForSecondsRealtime(cooldown / 2f);
         canShoot = true;
     }
 

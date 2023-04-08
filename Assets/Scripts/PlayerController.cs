@@ -113,4 +113,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        Messenger<PickupController>.AddListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
+    }
+
+    private void OnDestroy()
+    {
+        Messenger<PickupController>.RemoveListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
+    }
+
+    private void OnPickupTouched(PickupController pickup)
+    {
+        Debug.Log("Pickup obtained");
+        mainFiringPoint.AdjustCooldown(-0.05f);
+        switch (pickup.GetPickupType())
+        {
+            case PickupType.BulletFocus:
+                mainFiringPoint.SetPattern(FiringPattern.Focus);
+                break;
+            case PickupType.BulletSpread:
+                mainFiringPoint.SetPattern(FiringPattern.TripleSpread);
+                break;
+            default:
+                break;
+        }
+    }
 }
