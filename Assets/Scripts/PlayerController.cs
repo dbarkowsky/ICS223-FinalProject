@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
             if (positionRelativeToCamera.y < 0.05 && yMove < 0) { yMove = 0; }
             if (positionRelativeToCamera.y > 0.95 && yMove > 0) { yMove = 0; }
             if (positionRelativeToCamera.x < 0.03 && xMove < 0) { xMove = 0; }
-            if (positionRelativeToCamera.x > 0.76 && xMove > 0) { xMove = 0; }
+            if (positionRelativeToCamera.x > 0.77 && xMove > 0) { xMove = 0; }
 
             Vector3 direction = new Vector3(xMove, yMove) * speed * Time.deltaTime;
             transform.position += Vector3.ClampMagnitude(new Vector3(direction.x, direction.y, 0), 1);
