@@ -28,7 +28,7 @@ public class SplashPageController : MonoBehaviour
         Debug.Log(current);
         while (current.g > 0)
         {
-            yield return null;
+            yield return new WaitForSecondsRealtime(0.00025f);
             current.r -= fadeDelta;
             current.b -= fadeDelta;
             current.g -= fadeDelta;

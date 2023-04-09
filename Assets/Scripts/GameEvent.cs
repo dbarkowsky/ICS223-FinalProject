@@ -11,4 +11,8 @@ public static class GameEvent
     public const string ENEMY_TRIGGER_REACHED = "ENEMY_TRIGGER_REACHED";
     public const string PLAYER_LOCATION = "PLAYER_LOCATION";
     public const string PICKUP_TOUCHED = "PICKUP_TOUCHED";
+    public const string POPUP_OPENED = "POPUP_OPENED";
+    public const string POPUP_CLOSED = "POPUP_CLOSED";
+    public const string GAME_ACTIVE = "GAME_ACTIVE";
+    public const string GAME_INACTIVE = "GAME_INACTIVE";
 }
