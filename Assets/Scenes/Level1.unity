@@ -856,8 +856,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499470619}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.8571, y: 79.3291, z: 1}
-  m_LocalScale: {x: 14.163253, y: 169.455, z: 0.80259144}
+  m_LocalPosition: {x: -0.5, y: 34.6, z: 1}
+  m_LocalScale: {x: 18.268152, y: 79.588066, z: 0.80259144}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1954,6 +1954,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 5519990447865675032, guid: bbb2ea3977ff9654c9e20ac30bd21875, type: 3}
+      propertyPath: triggerType
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5519990447865675035, guid: bbb2ea3977ff9654c9e20ac30bd21875, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -2151,7 +2155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -38.9067, y: -7.9243}
+  m_AnchoredPosition: {x: -38.906708, y: -7.924286}
   m_SizeDelta: {x: -668.3345, y: -292.9647}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1406748665
@@ -2304,6 +2308,7 @@ MonoBehaviour:
   - {fileID: 3793014722739832213, guid: 280d3f0920753d348a834ebbc89903fb, type: 3}
   - {fileID: 3793014722739832213, guid: 53443221849a26546b87db93721d3b90, type: 3}
   explosion: {fileID: 8955877265678390800, guid: 0e5d4f5bde88ea44fa4517b2385208cb, type: 3}
+  crater: {fileID: 4285131291608364692, guid: c9737600ff24ff648b3b0de1e7afa647, type: 3}
   cam: {fileID: 519420031}
 --- !u!1 &1532200291
 GameObject:
