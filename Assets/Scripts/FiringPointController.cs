@@ -7,7 +7,6 @@ public enum FiringPattern
 {
     SingleShot,
     TripleShot,
-    Focus,
     TripleSpread,
     VSpread,
     Spiral,
@@ -16,7 +15,8 @@ public enum FiringPattern
     Burst,
     SingleShotAtPlayer,
     BurstAtPlayer,
-    Pulse
+    Pulse,
+    Focus
 }
 
 public class FiringPointController : MonoBehaviour

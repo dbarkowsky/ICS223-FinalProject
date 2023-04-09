@@ -340,7 +340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: pattern
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1798953461968345091, guid: 4f53aac4d157a634b8ab51c6663551ba, type: 3}
       propertyPath: cooldown
