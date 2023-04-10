@@ -47,8 +47,8 @@ public class PickupController : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Messenger<PickupController>.Broadcast(GameEvent.PICKUP_TOUCHED, this);
+            Destroy(this.gameObject);
         }
-        Destroy(this.gameObject);
     }
 
     public PickupType GetPickupType()
