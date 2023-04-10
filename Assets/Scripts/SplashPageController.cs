@@ -7,10 +7,12 @@ public class SplashPageController : MonoBehaviour
 {
     [SerializeField] CanvasRenderer splash;
     [SerializeField] float fadeDelta = 0.001f;
+    [SerializeField] AudioClip titleTheme;
+    [SerializeField] AudioClip startSound;
     // Start is called before the first frame update
     void Start()
     {
-        
+        SoundManager.Instance.PlayMusic(titleTheme);
     }
 
     // Update is called once per frame
@@ -19,6 +21,8 @@ public class SplashPageController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             StartCoroutine(FadeToBlack());
+            SoundManager.Instance.StopMusic();
+            SoundManager.Instance.PlaySfx(startSound);
         }
     }
 

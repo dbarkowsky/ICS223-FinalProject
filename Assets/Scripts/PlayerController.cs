@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (firing && point.pointCanShoot())
                 {
+                    Messenger.Broadcast(GameEvent.PLAYER_SHOOTS);
                     point.Fire();
                 }
             }

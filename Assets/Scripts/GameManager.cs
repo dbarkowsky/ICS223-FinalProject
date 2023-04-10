@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject exp = Instantiate(explosion, player.transform.position, player.transform.rotation);
             exp.transform.localScale = new Vector3(1, 1, 1);
+            Messenger.Broadcast(GameEvent.EXPLOSION);
             player.Respawn();
         }
     }
