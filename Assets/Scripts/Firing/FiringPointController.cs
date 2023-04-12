@@ -72,46 +72,49 @@ public class FiringPointController : MonoBehaviour
 
     public void Fire()
     {
-        switch (pattern)
+        if (isActive && canShoot)
         {
-            case FiringPattern.SingleShot:
-                StartCoroutine(SingleShot());
-                break;
-            case FiringPattern.TripleShot:
-                StartCoroutine(TripleShot());
-                break;
-            case FiringPattern.Focus:
-                StartCoroutine(Focus());
-                break;
-            case FiringPattern.TripleSpread:
-                StartCoroutine(TripleSpread());
-                break;
-            case FiringPattern.VSpread:
-                StartCoroutine(VSpread());
-                break;
-            case FiringPattern.Spiral:
-                StartCoroutine(Spiral());
-                break;
-            case FiringPattern.DoubleSpiral:
-                StartCoroutine(DoubleSpiral());
-                break;
-            case FiringPattern.FullScreenSpread:
-                StartCoroutine(FullScreenSpread());
-                break;
-            case FiringPattern.Burst:
-                StartCoroutine(Burst());
-                break;
-            case FiringPattern.SingleShotAtPlayer:
-                StartCoroutine(SingleShotAtPlayer());
-                break;
-            case FiringPattern.BurstAtPlayer:
-                StartCoroutine(BurstAtPlayer());
-                break;
-            case FiringPattern.Pulse:
-                StartCoroutine(Pulse());
-                break;
-            default:
-                break;
+            switch (pattern)
+            {
+                case FiringPattern.SingleShot:
+                    StartCoroutine(SingleShot());
+                    break;
+                case FiringPattern.TripleShot:
+                    StartCoroutine(TripleShot());
+                    break;
+                case FiringPattern.Focus:
+                    StartCoroutine(Focus());
+                    break;
+                case FiringPattern.TripleSpread:
+                    StartCoroutine(TripleSpread());
+                    break;
+                case FiringPattern.VSpread:
+                    StartCoroutine(VSpread());
+                    break;
+                case FiringPattern.Spiral:
+                    StartCoroutine(Spiral());
+                    break;
+                case FiringPattern.DoubleSpiral:
+                    StartCoroutine(DoubleSpiral());
+                    break;
+                case FiringPattern.FullScreenSpread:
+                    StartCoroutine(FullScreenSpread());
+                    break;
+                case FiringPattern.Burst:
+                    StartCoroutine(Burst());
+                    break;
+                case FiringPattern.SingleShotAtPlayer:
+                    StartCoroutine(SingleShotAtPlayer());
+                    break;
+                case FiringPattern.BurstAtPlayer:
+                    StartCoroutine(BurstAtPlayer());
+                    break;
+                case FiringPattern.Pulse:
+                    StartCoroutine(Pulse());
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
