@@ -82,6 +82,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator MoveIntoView()
     {
         this.canBeHit = false;
+        this.isDead = true;
         gameObject.GetComponent<CircleCollider2D>().enabled = false;
         yield return new WaitForSecondsRealtime(2);
         float timeElapsed = 0;
@@ -96,7 +97,6 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         this.isDead = false;
-        
         yield return new WaitForSecondsRealtime(2);
         Debug.Log("canbehit again");
         this.canBeHit = true;
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
     private void OnPickupTouched(PickupController pickup)
     {
         Debug.Log("Pickup obtained");
-        mainFiringPoint.AdjustCooldown(-0.05f);
+        mainFiringPoint.AdjustCooldown(-0.02f);
         switch (pickup.GetPickupType())
         {
             case PickupType.BulletFocus:

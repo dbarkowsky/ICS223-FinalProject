@@ -64,6 +64,10 @@ public class FiringPointController : MonoBehaviour
     public void AdjustCooldown(float delta)
     {
         cooldown += delta;
+        if (cooldown < 0.1f)
+        {
+            cooldown = 0.1f;
+        }
     }
 
     public void Fire()

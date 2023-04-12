@@ -28,7 +28,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioMixer mixer;
 
     private float sfxVolume = 1.0f;     // for tracking sfx volume
-    private float musicVolume = 1.0f;   // for tracking music volume
+    private float musicVolume = 0.75f;   // for tracking music volume
 
     const string PP_MUSIC_VOL = "MusicVol";
     const string PP_SFX_VOL = "SfxVol";
@@ -80,7 +80,7 @@ public class SoundManager : MonoBehaviour
     private void Init()
     {
         // Restore volume slider values [0..1] from PlayerPrefs
-        MusicVolume = PlayerPrefs.GetFloat(PP_MUSIC_VOL, 1f);   // if not found, use 1
+        MusicVolume = PlayerPrefs.GetFloat(PP_MUSIC_VOL, 0.75f);   // if not found, use 1
         SfxVolume = PlayerPrefs.GetFloat(PP_SFX_VOL, 1f);       // if not found, use 1
     }
 
