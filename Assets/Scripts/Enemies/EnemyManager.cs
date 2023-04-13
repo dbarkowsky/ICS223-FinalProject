@@ -123,7 +123,7 @@ public class EnemyManager : MonoBehaviour
             GameObject exp = Instantiate(explosion, enemy.transform.position + enemy.transform.localScale / 2, enemy.transform.rotation);
             float explosionSize = enemy.GetComponent<EnemyController>().explosionSize;
             exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
-            Messenger.Broadcast(GameEvent.EXPLOSION);
+            
             if (enemy.CompareTag("EnemyLand"))
             {
                 GameObject burnMark = Instantiate(crater, enemy.transform.position + enemy.transform.localScale / 2, enemy.transform.rotation);

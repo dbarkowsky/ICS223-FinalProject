@@ -86,12 +86,14 @@ public class EnemyController : MonoBehaviour
             if (hp <= 0)
             {
                 Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+                Messenger.Broadcast(GameEvent.EXPLOSION);
             }
         }
         if (other.CompareTag("Player") && this.CompareTag("EnemyAir"))
         {
             Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
             Messenger.Broadcast(GameEvent.PLAYER_DEAD);
+            Messenger.Broadcast(GameEvent.EXPLOSION);
         }
     }
 
@@ -276,6 +278,7 @@ public class EnemyController : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+        
         Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
     }
 
