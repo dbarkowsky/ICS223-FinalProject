@@ -74,18 +74,25 @@ public class CrabController : MonoBehaviour
         float drawbackSpeed = 1.5f;
         float swipeSpeed = 15f;
 
+        // NOTE: Must stop coroutines after. Claw approaches but never reaches goal, so coroutine must be manually stopped.
+        // Otherwise, it interferes with future claw movement.
+
         // Pull back left
-        leftArm.RotateArm(370f, drawbackSpeed);
+        var lastAttack = StartCoroutine(leftArm.RotateArmEnum(370f, drawbackSpeed));
         yield return new WaitForSecondsRealtime(3f);
+        StopCoroutine(lastAttack);
         // Swing left
-        leftArm.RotateArm(206f, swipeSpeed);
+        lastAttack = StartCoroutine(leftArm.RotateArmEnum(206f, swipeSpeed));
         yield return new WaitForSecondsRealtime(1f);
+        StopCoroutine(lastAttack);
         // Pull back right
-        rightArm.RotateArm(184f, drawbackSpeed);
+        lastAttack = StartCoroutine(rightArm.RotateArmEnum(184f, drawbackSpeed));
         yield return new WaitForSecondsRealtime(3f);
+        StopCoroutine(lastAttack);
         // Swing right
-        rightArm.RotateArm(330f, swipeSpeed);
+        lastAttack = StartCoroutine(rightArm.RotateArmEnum(330f, swipeSpeed));
         yield return new WaitForSecondsRealtime(1f);
+        StopCoroutine(lastAttack);
         canAttack = true;
     }
 

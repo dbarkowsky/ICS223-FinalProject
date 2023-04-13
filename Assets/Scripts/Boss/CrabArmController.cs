@@ -16,7 +16,6 @@ public class CrabArmController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //RotateArm(90f, 0.5f);
     }
 
     // Update is called once per frame
@@ -42,8 +41,8 @@ public class CrabArmController : MonoBehaviour
         StartCoroutine(RotateArmEnum(degrees, speed));
         
     }
-
-    IEnumerator RotateArmEnum(float degrees, float speed)
+    // 0 is right, 90 is up, 180 is left, 270 down
+    public IEnumerator RotateArmEnum(float degrees, float speed)
     {
         while (transform.rotation.z < degrees)
         {
@@ -53,14 +52,4 @@ public class CrabArmController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, degrees);
         yield return null;
     }
-
-    // 0 is right, 90 is up, 180 is left, 270 down
-    //IEnumerator RotateArm(Vector3 rotation, float time)
-    //{
-    //    while (!Mathf.Approximately(transform.rotation.z, rotation.z))
-    //    {
-    //        transform.rotation = Quaternion.Euler(Vector3.Lerp(transform.rotation.eulerAngles, rotation, time * Time.deltaTime));
-    //        yield return null;
-    //    }
-    //}
 }
