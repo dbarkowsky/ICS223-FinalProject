@@ -6,6 +6,8 @@ public class CrabBodyController : MonoBehaviour
 {
     [SerializeField] int hp = 300;
     [SerializeField] FiringPointController firingPoint;
+    [SerializeField] Animator anim;
+    public float animationTime = 4f;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,14 +20,23 @@ public class CrabBodyController : MonoBehaviour
 
     }
 
-    public void Fire()
+    public IEnumerator Fire()
     {
+        anim.SetBool("mouthFiring", true);
+        yield return new WaitForSecondsRealtime(1f);  
         firingPoint.Fire();
+        yield return new WaitForSecondsRealtime(animationTime);
+        anim.SetBool("mouthFiring", false);
     }
 
     public void SetFiringPattern(FiringPattern pattern)
     {
         firingPoint.SetPattern(pattern);
+    }
+
+    public void SetFiringRepetitions(int repetitions)
+    {
+        firingPoint.SetRepetitions(repetitions);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

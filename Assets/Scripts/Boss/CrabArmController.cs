@@ -12,6 +12,7 @@ public class CrabArmController : MonoBehaviour
     }
 
     [SerializeField] private float armSpeed = 0.1f;
+    [SerializeField] private FiringPointController firingPoint;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,14 @@ public class CrabArmController : MonoBehaviour
     void Update()
     {
         
+    }
+
+     
+
+    public void Fire()
+    {
+        firingPoint.SetLaserAngle(transform.rotation.z);
+        firingPoint.Fire();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

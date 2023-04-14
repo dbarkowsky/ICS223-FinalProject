@@ -17,20 +17,13 @@ public class CrabController : MonoBehaviour
     [SerializeField] CrabArmController leftArm;
     [SerializeField] CrabArmController rightArm;
     private bool canAttack = true;
-    private float timeBetweenAttacks = 10.0f;
+    private float timeBetweenAttacks = 3.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(CycleThroughCombat());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
 
 
     IEnumerator CycleThroughCombat()
@@ -46,6 +39,7 @@ public class CrabController : MonoBehaviour
                 Debug.Log("Crab cycle " + attackState.ToString());
                 // Call that attack
                 Attack(attackState);
+                //Attack(AttackState.ClawLasers);
             }
             // Wait to attack again
             yield return new WaitForSecondsRealtime(timeBetweenAttacks);
@@ -60,12 +54,73 @@ public class CrabController : MonoBehaviour
                 StartCoroutine(ClawSwipe());
                 break;
             case AttackState.ClawLasers:
+                //StartCoroutine(ClawLasers());
                 break;
             case AttackState.MouthSprinkler:
+                StartCoroutine(MouthSprinkler());
                 break;
             case AttackState.MouthSpray:
+                StartCoroutine(MouthSpray());
                 break;
         }
+    }
+
+    private IEnumerator ClawLasers()
+    {
+        canAttack = false;
+        // Move claws
+
+        // Fire lasers
+        for (int iterations = 0; iterations < 20; iterations++)
+        {
+            leftArm.Fire();
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+
+        for (int iterations = 0; iterations < 20; iterations++)
+        {
+            rightArm.Fire();
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        canAttack = true;
+    }
+
+    private IEnumerator MouthSprinkler()
+    {
+        canAttack = false;
+        // Pull claws in
+        float armMoveSpeed = 1.5f;
+        var leftMove = StartCoroutine(leftArm.RotateArmEnum(258f, armMoveSpeed));
+        var rightMove = StartCoroutine(rightArm.RotateArmEnum(281f, armMoveSpeed));
+        yield return new WaitForSecondsRealtime(2f);
+        StopCoroutine(rightMove);
+        StopCoroutine(leftMove);
+
+        // Shoot
+        body.SetFiringPattern(FiringPattern.CrabMouthSprinkler);
+        body.SetFiringRepetitions(2);
+        body.animationTime = 10f;
+        StartCoroutine(body.Fire());
+        canAttack = true;
+    }
+
+    private IEnumerator MouthSpray()
+    {
+        canAttack = false;
+        // Pull claws in
+        float armMoveSpeed = 1.5f;
+        var leftMove = StartCoroutine(leftArm.RotateArmEnum(228f, armMoveSpeed));
+        var rightMove = StartCoroutine(rightArm.RotateArmEnum(314f, armMoveSpeed));
+        yield return new WaitForSecondsRealtime(2f);
+        StopCoroutine(rightMove);
+        StopCoroutine(leftMove);
+
+        // Shoot
+        body.SetFiringPattern(FiringPattern.CrabMouthSpray);
+        body.SetFiringRepetitions(3);
+        body.animationTime = 4f;
+        StartCoroutine(body.Fire());
+        canAttack = true;
     }
 
     IEnumerator ClawSwipe()

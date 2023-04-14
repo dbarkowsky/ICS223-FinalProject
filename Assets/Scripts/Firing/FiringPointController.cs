@@ -16,7 +16,10 @@ public enum FiringPattern
     SingleShotAtPlayer,
     BurstAtPlayer,
     Pulse,
-    Focus
+    Focus,
+    CrabMouthSpray,
+    CrabMouthSprinkler,
+    Laser
 }
 
 public class FiringPointController : MonoBehaviour
@@ -28,18 +31,8 @@ public class FiringPointController : MonoBehaviour
     [SerializeField] float cooldown = 0.125f;
     [SerializeField] int repetitions = 1;
     private Vector2 playerPosition;
+    private float laserAngle = 0f;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void Awake()
     {
@@ -59,6 +52,16 @@ public class FiringPointController : MonoBehaviour
     public void SetPattern(FiringPattern newPattern)
     {
         pattern = newPattern;
+    }
+
+    public void SetRepetitions(int repetitions)
+    {
+        this.repetitions = repetitions;
+    }
+
+    public void SetLaserAngle(float angle)
+    {
+        laserAngle = ConvertRadiansToDegrees(angle);
     }
 
     public void AdjustCooldown(float delta)
@@ -112,6 +115,15 @@ public class FiringPointController : MonoBehaviour
                 case FiringPattern.Pulse:
                     StartCoroutine(Pulse());
                     break;
+                case FiringPattern.CrabMouthSpray:
+                    StartCoroutine(CrabMouthSpray());
+                    break;
+                case FiringPattern.CrabMouthSprinkler:
+                    StartCoroutine(CrabMouthSprinkler());
+                    break;
+                case FiringPattern.Laser:
+                    StartCoroutine(Laser());
+                    break;
                 default:
                     break;
             }
@@ -142,6 +154,18 @@ public class FiringPointController : MonoBehaviour
         float bulletOffset = 0.25f;
         Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation);
         Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation);
+        yield return new WaitForSecondsRealtime(cooldown / 2f);
+        canShoot = true;
+    }
+
+    private IEnumerator Laser()
+    {
+        Debug.Log(laserAngle);
+        canShoot = false;
+        Vector3 pos = transform.position;
+        Quaternion rotation = transform.rotation;
+        GameObject newBullet = Instantiate(bullet, pos, rotation);
+        newBullet.GetComponent<BulletController>().SetAngle(laserAngle - 290);
         yield return new WaitForSecondsRealtime(cooldown / 2f);
         canShoot = true;
     }
@@ -217,17 +241,21 @@ public class FiringPointController : MonoBehaviour
     private IEnumerator DoubleSpiral()
     {
         canShoot = false;
-        float secondsBetweenBullets = 0.3f;
+        float secondsBetweenBullets = 0.125f;
         int projectileSpreadDegrees = 30;
+        int projectilesPerRotation = 360 / projectileSpreadDegrees;
         for (int round = 0; round < repetitions; round++)
         {
-            Vector3 pos = transform.position;
-            Quaternion rotation = transform.rotation;
-            GameObject bullet1 = Instantiate(bullet, pos, rotation);
-            bullet1.GetComponent<BulletController>().SetAngle((round * projectileSpreadDegrees) % 360);
-            GameObject bullet2 = Instantiate(bullet, pos, rotation);
-            bullet2.GetComponent<BulletController>().SetAngle(((round * projectileSpreadDegrees) + 180) % 360);
-            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            for (int projectile = 0; projectile < projectilesPerRotation; projectile++)
+            {
+                Vector3 pos = transform.position;
+                Quaternion rotation = transform.rotation;
+                GameObject bullet1 = Instantiate(bullet, pos, rotation);
+                bullet1.GetComponent<BulletController>().SetAngle((projectile * projectileSpreadDegrees) % 360);
+                GameObject bullet2 = Instantiate(bullet, pos, rotation);
+                bullet2.GetComponent<BulletController>().SetAngle(((projectile * projectileSpreadDegrees) + 180) % 360);
+                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            }
         }
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
@@ -310,6 +338,66 @@ public class FiringPointController : MonoBehaviour
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
             yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+        }
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator CrabMouthSpray()
+    {
+        canShoot = false;
+        float secondsBetweenBullets = 0.07f;
+        int projectileSpreadDegrees = 20;
+        int projectilesPerRotation = 360 / projectileSpreadDegrees;
+        for (int round = 0; round < repetitions; round++)
+        {
+            for (int projectile = 0; projectile < projectilesPerRotation; projectile++)
+            {
+                Vector3 pos = transform.position;
+                Quaternion rotation = transform.rotation;
+                GameObject bullet1 = Instantiate(bullet, pos, rotation);
+                bullet1.GetComponent<BulletController>().SetAngle((projectile * projectileSpreadDegrees) % 360);
+                GameObject bullet2 = Instantiate(bullet, pos, rotation);
+                bullet2.GetComponent<BulletController>().SetAngle(((projectile * projectileSpreadDegrees) + 180) % 360);
+                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            }
+        }
+        yield return new WaitForSecondsRealtime(cooldown);
+        canShoot = true;
+    }
+
+    private IEnumerator CrabMouthSprinkler()
+    {
+        canShoot = false;
+        float secondsBetweenBullets;
+        int projectileSpreadDegrees = 7;
+        int angleOfSpray = 120;
+        int projectilesWithinAngle = angleOfSpray / projectileSpreadDegrees;
+        int angleOffset = 60;
+        for (int round = 0; round < repetitions; round++)
+        {
+            secondsBetweenBullets = 0.2f;
+            for (int projectile = 0; projectile < projectilesWithinAngle; projectile++)
+            {
+                Vector3 pos = transform.position;
+                Quaternion rotation = transform.rotation;
+                GameObject bullet1 = Instantiate(bullet, pos, rotation);
+                float angle = (angleOfSpray - angleOffset - (projectile * projectileSpreadDegrees));
+                if (angle <= 0) { angle = 359 - Mathf.Abs(angle); }
+                bullet1.GetComponent<BulletController>().SetAngle(angle);
+                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            }
+            secondsBetweenBullets = 0.07f;
+            for (int projectile = projectilesWithinAngle; projectile >= 0; projectile--)
+            {
+                Vector3 pos = transform.position;
+                Quaternion rotation = transform.rotation;
+                GameObject bullet1 = Instantiate(bullet, pos, rotation);
+                float angle = (angleOfSpray - angleOffset - (projectile * projectileSpreadDegrees));
+                if (angle <= 0) { angle = 359 - Mathf.Abs(angle); }
+                bullet1.GetComponent<BulletController>().SetAngle(angle);
+                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            }
         }
         yield return new WaitForSecondsRealtime(cooldown);
         canShoot = true;
