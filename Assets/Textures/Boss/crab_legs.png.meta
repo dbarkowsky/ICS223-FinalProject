@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a9c4101f87ca2a041b7de415ec631b84
+guid: 08887bc462ee8bc4ebd0796f9ca91a8a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 500
+  spritePixelsToUnits: 400
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -119,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: crab_body_0
+      name: crab_legs_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1048.75
-        height: 1005
+        width: 2496
+        height: 1323
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,20 +133,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 222e18d45751c8547a678538e7f73b6b
-      internalID: -267271382
+      spriteID: e3b93cdb7951cde43980f5c1b216bce8
+      internalID: -1484284867
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: crab_body_1
+      name: crab_legs_1
       rect:
         serializedVersion: 2
-        x: 1048
+        x: 2496
         y: 0
-        width: 1048.75
-        height: 1005
+        width: 2496
+        height: 1323
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,50 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ead8a6334f73f3140a5eb4fe03217816
-      internalID: -7049630
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: crab_body_2
-      rect:
-        serializedVersion: 2
-        x: 2096
-        y: 0
-        width: 1048.75
-        height: 1005
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ca347f989d69cf244b5625948ae698cf
-      internalID: -507263943
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: crab_body_3
-      rect:
-        serializedVersion: 2
-        x: 3144
-        y: 0
-        width: 1048.75
-        height: 1005
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a143d5f0ff2271543b025bb2eb3a2377
-      internalID: 132070924
+      spriteID: 6d01d9174185a3d49836d389d412f1c8
+      internalID: 256835714
       vertices: []
       indices: 
       edges: []
@@ -213,10 +171,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      crab_body_1: -7049630
-      crab_body_0: -267271382
-      crab_body_2: -507263943
-      crab_body_3: 132070924
+      crab_legs_0: -1484284867
+      crab_legs_1: 256835714
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

@@ -155,7 +155,7 @@ EdgeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -430,7 +430,6 @@ Transform:
   m_Children:
   - {fileID: 8252446343035242686}
   - {fileID: 7669914120142193129}
-  - {fileID: 7771540799238433169}
   - {fileID: 7669914120561611809}
   - {fileID: 8095259600973497367}
   - {fileID: 272757780678386516}
@@ -450,7 +449,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armSpeed: 1
-  firingPoint: {fileID: 7771540799238433168}
+  laser: {fileID: 469077554865236174}
+  laserWarning: {fileID: 7187951216906630754}
 --- !u!68 &-7708921165171790730
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -461,7 +461,7 @@ EdgeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -688,94 +688,3 @@ Transform:
   m_Father: {fileID: 7669914119415792532}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 13.458}
---- !u!1001 &8299330963152499091
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 2
-    m_TransformParent: {fileID: 7669914119415792532}
-    m_Modifications:
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_RootOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.63
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9464605
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.32281983
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 37.667
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345091, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: bullet
-      value: 
-      objectReference: {fileID: 8129172987191222152, guid: 2ea0f95d5c8bcc242b67aba35e199264, type: 3}
-    - target: {fileID: 1798953461968345091, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: pattern
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345091, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: cooldown
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345091, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: repetitions
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1798953461968345101, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-      propertyPath: m_Name
-      value: EnemyFiringPointLaser
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_AddedGameObjects: []
-  m_SourcePrefab: {fileID: 100100000, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
---- !u!114 &7771540799238433168 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1798953461968345091, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-  m_PrefabInstance: {fileID: 8299330963152499091}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a06444511bc5da4dbac549722488c5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &7771540799238433169 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1798953461968345090, guid: a7953c9a517c1f4498ba51c4b2be4fdf, type: 3}
-  m_PrefabInstance: {fileID: 8299330963152499091}
-  m_PrefabAsset: {fileID: 0}

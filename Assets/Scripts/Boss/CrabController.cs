@@ -17,12 +17,13 @@ public class CrabController : MonoBehaviour
     [SerializeField] CrabArmController leftArm;
     [SerializeField] CrabArmController rightArm;
     private bool canAttack = true;
-    private float timeBetweenAttacks = 3.0f;
+    private float timeBetweenAttacks = 6.0f;
+    private Coroutine attackCoroutine;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(CycleThroughCombat());
+        attackCoroutine =  StartCoroutine(CycleThroughCombat());
     }
 
 
@@ -38,11 +39,31 @@ public class CrabController : MonoBehaviour
                 AttackState attackState = (AttackState)values.GetValue(random.Next(values.Length));
                 Debug.Log("Crab cycle " + attackState.ToString());
                 // Call that attack
+                SetTimeBetweenAttacks(attackState);
                 Attack(attackState);
-                //Attack(AttackState.ClawLasers);
             }
             // Wait to attack again
             yield return new WaitForSecondsRealtime(timeBetweenAttacks);
+        }
+    }
+
+    // To make sure the full attack carries out before the next starts.
+    private void SetTimeBetweenAttacks(AttackState state)
+    {
+        switch (state)
+        {
+            case AttackState.ClawSwipe:
+                timeBetweenAttacks = 3.5f;
+                break;
+            case AttackState.ClawLasers:
+                timeBetweenAttacks = 1f;
+                break;
+            case AttackState.MouthSprinkler:
+                timeBetweenAttacks = 8f;
+                break;
+            case AttackState.MouthSpray:
+                timeBetweenAttacks = 8f;
+                break;
         }
     }
 
@@ -54,7 +75,7 @@ public class CrabController : MonoBehaviour
                 StartCoroutine(ClawSwipe());
                 break;
             case AttackState.ClawLasers:
-                //StartCoroutine(ClawLasers());
+                StartCoroutine(ClawLasers());
                 break;
             case AttackState.MouthSprinkler:
                 StartCoroutine(MouthSprinkler());
@@ -65,23 +86,50 @@ public class CrabController : MonoBehaviour
         }
     }
 
+    private float GetRandomFloat(float minimum, float maximum)
+    {
+        System.Random random = new System.Random();
+        return (float)(random.NextDouble() * (maximum - minimum) + minimum);
+    }
+
     private IEnumerator ClawLasers()
     {
-        canAttack = false;
-        // Move claws
+        canAttack = false;        
+        float armMoveSpeed = 1.5f;
+        // Move left arm
+        float attackAngleLeft = GetRandomFloat(225f, 325f);
+        var leftMove = StartCoroutine(leftArm.RotateArmEnum(attackAngleLeft, armMoveSpeed));
+        yield return new WaitForSecondsRealtime(1f);
+        StopCoroutine(leftMove);
+        // Fire left arm
+        leftArm.Fire();
+        yield return new WaitForSecondsRealtime(2f);
+        // Move right arm
+        float attackAngleRight = GetRandomFloat(210f, 315f);
+        var rightMove = StartCoroutine(rightArm.RotateArmEnum(attackAngleRight, armMoveSpeed));
+        yield return new WaitForSecondsRealtime(1f);
+        StopCoroutine(rightMove);
+        // Fire right arm
+        rightArm.Fire();
+        yield return new WaitForSecondsRealtime(2f);
 
-        // Fire lasers
-        for (int iterations = 0; iterations < 20; iterations++)
-        {
-            leftArm.Fire();
-            yield return new WaitForSecondsRealtime(0.05f);
-        }
-
-        for (int iterations = 0; iterations < 20; iterations++)
-        {
-            rightArm.Fire();
-            yield return new WaitForSecondsRealtime(0.05f);
-        }
+        // Do it again
+        // Move left arm
+        attackAngleLeft = GetRandomFloat(225f, 325f);
+        leftMove = StartCoroutine(leftArm.RotateArmEnum(attackAngleLeft, armMoveSpeed));
+        yield return new WaitForSecondsRealtime(1f);
+        StopCoroutine(leftMove);
+        // Fire left arm
+        leftArm.Fire();
+        yield return new WaitForSecondsRealtime(2f);
+        // Move right arm
+        attackAngleRight = GetRandomFloat(210f, 315f);
+        rightMove = StartCoroutine(rightArm.RotateArmEnum(attackAngleRight, armMoveSpeed));
+        yield return new WaitForSecondsRealtime(1f);
+        StopCoroutine(rightMove);
+        // Fire right arm
+        rightArm.Fire();
+        yield return new WaitForSecondsRealtime(2f);
         canAttack = true;
     }
 

@@ -48,7 +48,8 @@ public class CrabBodyController : MonoBehaviour
             StartCoroutine(StrobeOnHit());
             if (hp <= 0)
             {
-                Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+                //Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+                Debug.Log("Crab dead.");
             }
         }
         if (other.CompareTag("Player"))

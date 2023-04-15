@@ -12,25 +12,29 @@ public class CrabArmController : MonoBehaviour
     }
 
     [SerializeField] private float armSpeed = 0.1f;
-    [SerializeField] private FiringPointController firingPoint;
+    [SerializeField] private GameObject laser;
+    [SerializeField] private GameObject laserWarning;
+    private bool canShoot = true;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-     
 
     public void Fire()
     {
-        firingPoint.SetLaserAngle(transform.rotation.z);
-        firingPoint.Fire();
+        if (canShoot)
+        {
+            StartCoroutine(FireLaser());
+        }
+    }
+
+    private IEnumerator FireLaser()
+    {
+        canShoot = false;
+        laserWarning.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.5f);
+        laser.SetActive(true);
+        laserWarning.SetActive(false);
+        yield return new WaitForSecondsRealtime(1f);
+        laser.SetActive(false);
+        canShoot = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
