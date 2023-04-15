@@ -8,6 +8,7 @@ public class BackgroundScript : MonoBehaviour
 {
     public float scrollSpeed;
     [SerializeField] private Renderer rend;
+    private bool isScrolling = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,24 @@ public class BackgroundScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rend.material.mainTextureOffset += new Vector2(0, scrollSpeed * Time.deltaTime);
+        if (isScrolling)
+        {
+            rend.material.mainTextureOffset += new Vector2(0, scrollSpeed * Time.deltaTime);
+        }
+    }
+
+    private void Awake()
+    {
+        Messenger.AddListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
+    }
+
+    private void OnDestroy()
+    {
+        Messenger.RemoveListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
+    }
+
+    void OnStartBossBattle()
+    {
+        isScrolling = true;
     }
 }

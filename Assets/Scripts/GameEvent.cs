@@ -17,4 +17,7 @@ public static class GameEvent
     public const string GAME_INACTIVE = "GAME_INACTIVE";
     public const string PLAYER_SHOOTS = "PLAYER_SHOOTS";
     public const string EXPLOSION = "EXPLOSION";
+    public const string START_BOSS_MUSIC = "START_BOSS_MUSIC";
+    public const string STOP_CAMERA = "STOP_CAMERA";
+    public const string START_BOSS_BATTLE = "START_BOSS_BATTLE";
 }

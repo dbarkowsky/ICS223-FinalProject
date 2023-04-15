@@ -24,12 +24,14 @@ public class AudioManager : MonoBehaviour
     {
         Messenger.AddListener(GameEvent.PLAYER_SHOOTS, OnPlayerShoots);
         Messenger.AddListener(GameEvent.EXPLOSION, OnExplosion);
+        Messenger.AddListener(GameEvent.START_BOSS_MUSIC, OnStartBossMusic);
     }
 
     private void OnDestroy()
     {
         Messenger.RemoveListener(GameEvent.PLAYER_SHOOTS, OnPlayerShoots);
         Messenger.RemoveListener(GameEvent.EXPLOSION, OnExplosion);
+        Messenger.RemoveListener(GameEvent.START_BOSS_MUSIC, OnStartBossMusic);
     }
 
     void OnPlayerShoots()
@@ -39,5 +41,10 @@ public class AudioManager : MonoBehaviour
     void OnExplosion()
     {
         SoundManager.Instance.PlaySfx(explosion);
+    }
+
+    void OnStartBossMusic()
+    {
+        SoundManager.Instance.PlayMusic(bossSong);
     }
 }

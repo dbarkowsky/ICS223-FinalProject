@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] PlayerController player;
     [SerializeField] GameObject background;
-    [SerializeField] Camera cam;
+    [SerializeField] CameraController cam;
     [SerializeField] GameObject explosion;
     
     // Start is called before the first frame update

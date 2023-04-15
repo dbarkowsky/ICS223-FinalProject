@@ -16,7 +16,7 @@ public class CrabController : MonoBehaviour
     [SerializeField] CrabBodyController body;
     [SerializeField] CrabArmController leftArm;
     [SerializeField] CrabArmController rightArm;
-    private bool canAttack = true;
+    private bool canAttack = false;
     private float timeBetweenAttacks = 6.0f;
     private Coroutine attackCoroutine;
 
@@ -90,6 +90,11 @@ public class CrabController : MonoBehaviour
     {
         System.Random random = new System.Random();
         return (float)(random.NextDouble() * (maximum - minimum) + minimum);
+    }
+
+    public void Fight(bool canFight)
+    {
+        canAttack = canFight;
     }
 
     private IEnumerator ClawLasers()

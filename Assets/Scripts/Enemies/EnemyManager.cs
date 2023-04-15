@@ -24,6 +24,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject crater;
+    [SerializeField] private CrabController crab;
 
     [SerializeField] Camera cam;
 
@@ -52,6 +53,7 @@ public class EnemyManager : MonoBehaviour
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyed);
         Messenger<TriggerType>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
+        Messenger.AddListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
     }
 
     private void OnDestroy()
@@ -59,6 +61,7 @@ public class EnemyManager : MonoBehaviour
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED, OnEnemyDestroyed);
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyed);
         Messenger<TriggerType>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
+        Messenger.RemoveListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
     }
 
     private void OnEnemyTriggerReached(TriggerType triggerType)
@@ -132,6 +135,11 @@ public class EnemyManager : MonoBehaviour
             }
             DestroyEnemy(enemy); 
         }
+    }
+
+    private void OnStartBossBattle()
+    {
+        crab.Fight(true);
     }
 
     private void DestroyEnemy(GameObject enemy)
