@@ -154,7 +154,7 @@ public class FiringPointController : MonoBehaviour
         float bulletOffset = 0.25f;
         Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation);
         Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation);
-        yield return new WaitForSecondsRealtime(cooldown / 2f);
+        yield return new WaitForSecondsRealtime(cooldown / 1.2f);
         canShoot = true;
     }
 

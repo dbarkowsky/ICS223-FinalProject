@@ -76,7 +76,7 @@ public class EnemyManager : MonoBehaviour
 
     private IEnumerator CrabExplode()
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 45; i++)
         {
             GameObject exp = Instantiate(explosion, crab.transform.position + new Vector3(Random.Range(-4, 4), Random.Range(-2, 2), crab.transform.position.z - 1f), crab.transform.rotation);
             float explosionSize = Random.Range(1, 4);

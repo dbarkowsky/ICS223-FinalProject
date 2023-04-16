@@ -32,9 +32,11 @@ public class CrabArmController : MonoBehaviour
     {
         canShoot = false;
         laserWarning.SetActive(true);
+        Messenger.Broadcast(GameEvent.LASER_CHARGE);
         yield return new WaitForSecondsRealtime(0.5f);
         laser.SetActive(true);
         laserWarning.SetActive(false);
+        Messenger.Broadcast(GameEvent.LASER_SHOOT);
         yield return new WaitForSecondsRealtime(1f);
         laser.SetActive(false);
         canShoot = true;
@@ -45,6 +47,7 @@ public class CrabArmController : MonoBehaviour
         if (other.CompareTag("PlayerBullet"))
         {
             Destroy(other.gameObject);
+            Messenger.Broadcast(GameEvent.CLAW_HIT);
         }
         if (other.CompareTag("Player"))
         {

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(BroadcastPlayerLocation());
+        Messenger.Broadcast(GameEvent.START_LEVEL_MUSIC);
     }
 
     // Update is called once per frame

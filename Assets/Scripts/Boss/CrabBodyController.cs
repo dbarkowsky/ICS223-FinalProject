@@ -9,6 +9,7 @@ public class CrabBodyController : MonoBehaviour
     [SerializeField] Animator anim;
     public float animationTime = 4f;
     public bool canShoot = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +25,7 @@ public class CrabBodyController : MonoBehaviour
     public IEnumerator Fire()
     {
         anim.SetBool("mouthFiring", true);
+        Messenger.Broadcast(GameEvent.BOSS_YELL);
         yield return new WaitForSecondsRealtime(1f);  
         if (canShoot) firingPoint.Fire();
         yield return new WaitForSecondsRealtime(animationTime);

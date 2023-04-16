@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ffd5a083645fa4c9d4ae61f45ff801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 5
+  hp: 400
   firingPoint: {fileID: 2173843006037649613}
   anim: {fileID: 494305338310374918}
   animationTime: 4

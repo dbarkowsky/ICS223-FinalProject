@@ -28,7 +28,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioMixer mixer;
 
     private float sfxVolume = 1.0f;     // for tracking sfx volume
-    private float musicVolume = 0.75f;   // for tracking music volume
+    private float musicVolume = 0.5f;   // for tracking music volume
 
     const string PP_MUSIC_VOL = "MusicVol";
     const string PP_SFX_VOL = "SfxVol";

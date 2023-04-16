@@ -16,6 +16,7 @@ public class BulletController : MonoBehaviour
     private float angle = 0f; // IN DEGREES! TRIG FUNCTIONS DON'T WORK LIKE THIS, CONVERT TO RADIANS BEFORE TRIG
     [SerializeField] BulletType type;
     [SerializeField] float timeToLive = 5f;
+    bool gameIsPaused = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,7 @@ public class BulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        gameIsPaused = Time.timeScale == 0;
         transform.position += (direction * speed * Time.deltaTime);
         if (type == BulletType.Enemy)
         {
@@ -37,6 +39,7 @@ public class BulletController : MonoBehaviour
     IEnumerator DestroyMe()
     {
         yield return new WaitForSecondsRealtime(timeToLive);
+        //while (gameIsPaused) yield return new WaitForSecondsRealtime(timeToLive); // tried to avoid disappearing bullets on pause, but here is a catchup which is even worse
         Destroy(gameObject);
     }
 

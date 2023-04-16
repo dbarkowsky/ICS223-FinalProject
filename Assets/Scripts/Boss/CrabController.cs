@@ -192,6 +192,7 @@ public class CrabController : MonoBehaviour
         StopCoroutine(lastAttack);
         // Swing left
         lastAttack = StartCoroutine(leftArm.RotateArmEnum(206f, swipeSpeed));
+        Messenger.Broadcast(GameEvent.CLAW_SWIPE);
         yield return new WaitForSecondsRealtime(1f);
         StopCoroutine(lastAttack);
         // Pull back right
@@ -200,6 +201,7 @@ public class CrabController : MonoBehaviour
         StopCoroutine(lastAttack);
         // Swing right
         lastAttack = StartCoroutine(rightArm.RotateArmEnum(330f, swipeSpeed));
+        Messenger.Broadcast(GameEvent.CLAW_SWIPE);
         yield return new WaitForSecondsRealtime(1f);
         StopCoroutine(lastAttack);
         canAttack = true;
