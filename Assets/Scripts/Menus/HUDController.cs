@@ -103,6 +103,7 @@ public class HUDController : MonoBehaviour
             yield return null;
         }
         endScreen.color = new Color(endScreen.color.r, endScreen.color.g, endScreen.color.b, 1f);
+        Messenger.Broadcast(GameEvent.START_RESULTS_MUSIC);
         endTitle.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(0.5f);
         endStats.gameObject.SetActive(true);

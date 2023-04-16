@@ -32,7 +32,7 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+
     }
 
     // Update is called once per frame
@@ -55,6 +55,7 @@ public class EnemyManager : MonoBehaviour
         Messenger<GameObject>.AddListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyed);
         Messenger<TriggerType>.AddListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
         Messenger.AddListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
+        Messenger.AddListener(GameEvent.START_BOSS_MUSIC, OnStartBossMusic);
         Messenger.AddListener(GameEvent.CRAB_DESTROYED, this.OnCrabDestroyed);
     }
 
@@ -64,6 +65,7 @@ public class EnemyManager : MonoBehaviour
         Messenger<GameObject>.RemoveListener(GameEvent.ENEMY_DESTROYED_SELF, OnEnemyDestroyed);
         Messenger<TriggerType>.RemoveListener(GameEvent.ENEMY_TRIGGER_REACHED, OnEnemyTriggerReached);
         Messenger.RemoveListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
+        Messenger.RemoveListener(GameEvent.START_BOSS_MUSIC, OnStartBossMusic);
         Messenger.RemoveListener(GameEvent.CRAB_DESTROYED, this.OnCrabDestroyed);
 
     }
@@ -76,14 +78,22 @@ public class EnemyManager : MonoBehaviour
 
     private IEnumerator CrabExplode()
     {
-        for (int i = 0; i < 45; i++)
+        GameObject exp;
+        float explosionSize;
+        for (int i = 0; i < 25; i++)
         {
-            GameObject exp = Instantiate(explosion, crab.transform.position + new Vector3(Random.Range(-4, 4), Random.Range(-2, 2), crab.transform.position.z - 1f), crab.transform.rotation);
-            float explosionSize = Random.Range(1, 4);
+            exp = Instantiate(explosion, crab.transform.position + new Vector3(Random.Range(-4, 4), Random.Range(-2, 2), crab.transform.position.z - 1f), crab.transform.rotation);
+            explosionSize = Random.Range(1, 4);
             exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
             Messenger.Broadcast(GameEvent.EXPLOSION);
             yield return new WaitForSecondsRealtime(0.25f);
         }
+        // One big explosion
+        exp = Instantiate(explosion, crab.transform.position - new Vector3(3.5f, 0, 0), crab.transform.rotation);
+        explosionSize = crab.explosionSize;
+        exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
+        Destroy(crab.gameObject);
+        Messenger.Broadcast(GameEvent.EXPLOSION);
         Messenger.Broadcast(GameEvent.FADE_TO_SCORE);
     }
 
@@ -163,6 +173,11 @@ public class EnemyManager : MonoBehaviour
     private void OnStartBossBattle()
     {
         crab.Fight(true);
+    }
+
+    private void OnStartBossMusic()
+    {
+        crab.SetHitBoxes(true);
     }
 
     private void DestroyEnemy(GameObject enemy)

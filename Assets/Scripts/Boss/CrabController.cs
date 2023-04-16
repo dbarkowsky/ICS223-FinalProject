@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -20,11 +21,21 @@ public class CrabController : MonoBehaviour
     private bool canAttack = false;
     private float timeBetweenAttacks = 6.0f;
     private Coroutine attackCoroutine;
+    public float explosionSize = 10f;
 
     // Start is called before the first frame update
     void Start()
     {
         attackCoroutine =  StartCoroutine(CycleThroughCombat());
+        SetHitBoxes(false);
+    }
+
+    public void SetHitBoxes(bool state)
+    {
+        // turn on/off hitboxes
+        body.GetComponent<PolygonCollider2D>().enabled = state;
+        leftArm.GetComponent<PolygonCollider2D>().enabled = state;
+        rightArm.GetComponent<PolygonCollider2D>().enabled = state;
     }
 
 
@@ -226,9 +237,6 @@ public class CrabController : MonoBehaviour
         body.canShoot = false;
         leftArm.canShoot = false;
         rightArm.canShoot = false;
-        // turn off hitboxes
-        body.GetComponent<PolygonCollider2D>().enabled = false;
-        leftArm.GetComponent<PolygonCollider2D>().enabled = false;
-        rightArm.GetComponent<PolygonCollider2D>().enabled = false;
+        SetHitBoxes(false);
     }
 }

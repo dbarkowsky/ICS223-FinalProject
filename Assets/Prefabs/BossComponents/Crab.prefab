@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ffd5a083645fa4c9d4ae61f45ff801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 400
+  hp: 300
   firingPoint: {fileID: 2173843006037649613}
   anim: {fileID: 494305338310374918}
   animationTime: 4
@@ -395,6 +395,7 @@ MonoBehaviour:
   body: {fileID: 494305338310374919}
   leftArm: {fileID: 2424488324328564210}
   rightArm: {fileID: 5464134121010688792}
+  explosionSize: 10
 --- !u!1 &494305339595102444
 GameObject:
   m_ObjectHideFlags: 0
