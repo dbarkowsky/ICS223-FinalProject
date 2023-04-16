@@ -77,7 +77,7 @@ LineRenderer:
   m_SortingOrder: -2
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 3.8, y: -6.6, z: 0}
+  - {x: 8.8, y: -15.25, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1.196079
@@ -86,7 +86,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.15882353
+        value: 0.18912764
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -94,8 +94,8 @@ LineRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.097627684
-        value: 0.88823634
+        time: 0.028818175
+        value: 0.9286416
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -163,8 +163,8 @@ EdgeCollider2D:
   m_Points:
   - {x: 0.40771198, y: -1.1284907}
   - {x: 0.9922393, y: -2.1347728}
-  - {x: 3.4257483, y: -6.8167024}
-  - {x: 4.1821404, y: -6.33841}
+  - {x: 4.7824917, y: -8.986809}
+  - {x: 5.3709807, y: -8.643415}
   - {x: 0.6437654, y: -0.86407727}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
@@ -242,7 +242,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -3
   m_Sprite: {fileID: 21300000, guid: 17e44133ab857e74fb0bdc8bf7da0089, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -330,7 +330,7 @@ LineRenderer:
   m_SortingOrder: -2
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 3.8, y: -6.6, z: 0}
+  - {x: 8.8, y: -15.25, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1.196079
@@ -424,7 +424,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7669914119415792531}
-  m_LocalRotation: {x: -0, y: -0, z: -0.6191028, w: 0.78531}
+  m_LocalRotation: {x: 0, y: 0, z: -0.6191008, w: 0.7853115}
   m_LocalPosition: {x: -0.528, y: 1.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -435,7 +435,7 @@ Transform:
   - {fileID: 8095259600973497367}
   - {fileID: 272757780678386516}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -76.501}
 --- !u!114 &2844484269637589918
 MonoBehaviour:
@@ -452,6 +452,7 @@ MonoBehaviour:
   armSpeed: 1
   laser: {fileID: 469077554865236174}
   laserWarning: {fileID: 7187951216906630754}
+  canShoot: 1
 --- !u!50 &4034745364136746127
 Rigidbody2D:
   serializedVersion: 4

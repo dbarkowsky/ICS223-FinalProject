@@ -79,11 +79,37 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(MoveIntoView());
     }
 
+    public void Disable()
+    {
+        isDead = true;
+        canBeHit = false;
+        gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+    }
+
+    public void Enable()
+    {
+        isDead = false;
+        canBeHit = true;
+        gameObject.GetComponent<PolygonCollider2D>().enabled = true;
+    }
+
+    public IEnumerator ExitTopOfScreen(float durationPerMove = 3)
+    {
+        float timeElapsed = 0;
+
+        while (timeElapsed < durationPerMove)
+        {
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition + new Vector2(0f, 12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
     IEnumerator MoveIntoView()
     {
-        this.canBeHit = false;
-        this.isDead = true;
-        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+        this.Disable();
         yield return new WaitForSecondsRealtime(2);
         float timeElapsed = 0;
         float durationPerMove = 1;
@@ -100,7 +126,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSecondsRealtime(2);
         Debug.Log("canbehit again");
         this.canBeHit = true;
-        gameObject.GetComponent<CircleCollider2D>().enabled = true;
+        gameObject.GetComponent<PolygonCollider2D>().enabled = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

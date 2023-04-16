@@ -24,11 +24,27 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Messenger.AddListener(GameEvent.PLAYER_DEAD, this.OnPlayerDead); // generic parameter is what's passed to function
+        Messenger.AddListener(GameEvent.CRAB_DESTROYED, this.OnCrabDestroyed);
     }
 
     private void OnDestroy()
     {
         Messenger.RemoveListener(GameEvent.PLAYER_DEAD, this.OnPlayerDead);
+        Messenger.RemoveListener(GameEvent.CRAB_DESTROYED, this.OnCrabDestroyed);
+    }
+
+    private void OnCrabDestroyed()
+    {
+        StartCoroutine(EndGame());
+    }
+
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        player.Disable();
+        float exitDuration = 6f;
+        StartCoroutine(player.ExitTopOfScreen(exitDuration));
+        yield return new WaitForSecondsRealtime(exitDuration);
     }
 
     private void OnPlayerDead()

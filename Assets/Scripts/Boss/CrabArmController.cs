@@ -14,7 +14,7 @@ public class CrabArmController : MonoBehaviour
     [SerializeField] private float armSpeed = 0.1f;
     [SerializeField] private GameObject laser;
     [SerializeField] private GameObject laserWarning;
-    private bool canShoot = true;
+    public bool canShoot = true;
 
 
     public void Fire()
@@ -22,6 +22,9 @@ public class CrabArmController : MonoBehaviour
         if (canShoot)
         {
             StartCoroutine(FireLaser());
+        } else
+        {
+            StopAllCoroutines();
         }
     }
 

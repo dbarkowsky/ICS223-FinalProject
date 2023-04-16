@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class CrabController : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class CrabController : MonoBehaviour
 
     IEnumerator CycleThroughCombat()
     {
-        while (true)
+        while (body.hp > 0)
         {
             if (canAttack)
             {
@@ -143,8 +144,8 @@ public class CrabController : MonoBehaviour
         canAttack = false;
         // Pull claws in
         float armMoveSpeed = 1.5f;
-        var leftMove = StartCoroutine(leftArm.RotateArmEnum(258f, armMoveSpeed));
-        var rightMove = StartCoroutine(rightArm.RotateArmEnum(281f, armMoveSpeed));
+        var leftMove = StartCoroutine(leftArm.RotateArmEnum(290f, armMoveSpeed));
+        var rightMove = StartCoroutine(rightArm.RotateArmEnum(260f, armMoveSpeed));
         yield return new WaitForSecondsRealtime(2f);
         StopCoroutine(rightMove);
         StopCoroutine(leftMove);
@@ -204,5 +205,28 @@ public class CrabController : MonoBehaviour
         canAttack = true;
     }
 
+    
 
+    private void Awake()
+    {
+        Messenger.AddListener(GameEvent.CRAB_DESTROYED, this.OnCrabDestroyed);
+    }
+
+    private void OnDestroy()
+    {
+        Messenger.RemoveListener(GameEvent.CRAB_DESTROYED, this.OnCrabDestroyed);
+    }
+
+    private void OnCrabDestroyed()
+    {
+        StopAllCoroutines();
+        canAttack = false;
+        body.canShoot = false;
+        leftArm.canShoot = false;
+        rightArm.canShoot = false;
+        // turn off hitboxes
+        body.GetComponent<PolygonCollider2D>().enabled = false;
+        leftArm.GetComponent<PolygonCollider2D>().enabled = false;
+        rightArm.GetComponent<PolygonCollider2D>().enabled = false;
+    }
 }

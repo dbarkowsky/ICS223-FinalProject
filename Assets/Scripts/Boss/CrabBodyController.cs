@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CrabBodyController : MonoBehaviour
 {
-    [SerializeField] int hp = 300;
+    [SerializeField] public int hp = 300;
     [SerializeField] FiringPointController firingPoint;
     [SerializeField] Animator anim;
     public float animationTime = 4f;
+    public bool canShoot = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +25,7 @@ public class CrabBodyController : MonoBehaviour
     {
         anim.SetBool("mouthFiring", true);
         yield return new WaitForSecondsRealtime(1f);  
-        firingPoint.Fire();
+        if (canShoot) firingPoint.Fire();
         yield return new WaitForSecondsRealtime(animationTime);
         anim.SetBool("mouthFiring", false);
     }
@@ -48,7 +49,7 @@ public class CrabBodyController : MonoBehaviour
             StartCoroutine(StrobeOnHit());
             if (hp <= 0)
             {
-                //Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
+                Messenger.Broadcast(GameEvent.CRAB_DESTROYED);
                 Debug.Log("Crab dead.");
             }
         }

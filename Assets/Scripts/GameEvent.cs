@@ -20,4 +20,7 @@ public static class GameEvent
     public const string START_BOSS_MUSIC = "START_BOSS_MUSIC";
     public const string STOP_CAMERA = "STOP_CAMERA";
     public const string START_BOSS_BATTLE = "START_BOSS_BATTLE";
+    public const string CRAB_DESTROYED = "CRAB_DESTROYED";
+    public const string FADE_TO_SCORE = "FADE_TO_SCORE";
+    public const string UPDATE_FINAL_SCORE = "UPDATE_FINAL_SCORE";
 }

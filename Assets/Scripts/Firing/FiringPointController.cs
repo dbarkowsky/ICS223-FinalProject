@@ -370,13 +370,15 @@ public class FiringPointController : MonoBehaviour
     {
         canShoot = false;
         float secondsBetweenBullets;
-        int projectileSpreadDegrees = 7;
+        int projectileSpreadDegrees;
         int angleOfSpray = 120;
-        int projectilesWithinAngle = angleOfSpray / projectileSpreadDegrees;
+        int projectilesWithinAngle;
         int angleOffset = 60;
         for (int round = 0; round < repetitions; round++)
         {
-            secondsBetweenBullets = 0.2f;
+            projectileSpreadDegrees = 7;
+            projectilesWithinAngle = angleOfSpray / projectileSpreadDegrees;
+            secondsBetweenBullets = 0.3f;
             for (int projectile = 0; projectile < projectilesWithinAngle; projectile++)
             {
                 Vector3 pos = transform.position;
@@ -387,7 +389,9 @@ public class FiringPointController : MonoBehaviour
                 bullet1.GetComponent<BulletController>().SetAngle(angle);
                 yield return new WaitForSecondsRealtime(secondsBetweenBullets);
             }
-            secondsBetweenBullets = 0.07f;
+            projectileSpreadDegrees = 12;
+            projectilesWithinAngle = angleOfSpray / projectileSpreadDegrees;
+            secondsBetweenBullets = 0.12f;
             for (int projectile = projectilesWithinAngle; projectile >= 0; projectile--)
             {
                 Vector3 pos = transform.position;
