@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -80,8 +81,8 @@ public class SoundManager : MonoBehaviour
     private void Init()
     {
         // Restore volume slider values [0..1] from PlayerPrefs
-        MusicVolume = PlayerPrefs.GetFloat(PP_MUSIC_VOL, 0.75f);   // if not found, use 1
-        SfxVolume = PlayerPrefs.GetFloat(PP_SFX_VOL, 1f);       // if not found, use 1
+        MusicVolume = PlayerPrefs.GetFloat(PP_MUSIC_VOL, musicVolume);   // if not found, use 1
+        SfxVolume = PlayerPrefs.GetFloat(PP_SFX_VOL, sfxVolume);       // if not found, use 1
     }
 
     // Play a sfx clip (fire & forget)
@@ -104,9 +105,39 @@ public class SoundManager : MonoBehaviour
         musicSource.Stop();
     }
 
+    // Stop with fade, then start new music
+    public void StartSmoothly(AudioClip clip)
+    {
+        StartCoroutine(FadeThenPlay(1f, clip));
+    }
+
     // convert from linear to logarithmic scale ([0...1] to decibels)
     private float LinearToLog(float value)
     {
         return Mathf.Log10(value) * 20;
     }
+
+    private float LogToLinear(float value)
+    {
+        return Mathf.Pow(10, value / 20);
+    }
+
+    private IEnumerator FadeThenPlay(float duration, AudioClip clip)
+    {
+        float currentTime = 0;
+        float currentVol;
+        mixer.GetFloat("MusicVolume", out currentVol);
+        currentVol = LogToLinear(currentVol);
+        float targetValue = Mathf.Clamp(0.001f, 0.0001f, 1);
+        while (currentTime < duration)
+        {
+            currentTime += Time.deltaTime;
+            float newVol = Mathf.Lerp(currentVol, targetValue, currentTime / duration);
+            mixer.SetFloat("MusicVolume", LinearToLog(newVol));
+            yield return null;
+        }
+        mixer.SetFloat("MusicVolume", LinearToLog(musicVolume));
+        PlayMusic(clip);
+    }
 }
+

@@ -182,7 +182,8 @@ public class EnemyManager : MonoBehaviour
 
     private void DestroyEnemy(GameObject enemy)
     {
-        enemies.RemoveAt(enemies.IndexOf(enemy));
+        int index = enemies.IndexOf(enemy);
+        if (index < enemies.Count && index >= 0) enemies.RemoveAt(index);
         Destroy(enemy);
     }
 

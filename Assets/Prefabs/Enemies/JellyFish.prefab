@@ -53,7 +53,7 @@ MonoBehaviour:
   moveDuration: 2
   scoreValue: 75
   explosionSize: 2
-  hp: 5
+  hp: 10
   firingPoints:
   - {fileID: 3194270873056530978}
 --- !u!61 &3793014722739832214

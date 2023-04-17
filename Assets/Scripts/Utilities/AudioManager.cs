@@ -71,7 +71,7 @@ public class AudioManager : MonoBehaviour
 
     void OnStartBossMusic()
     {
-        SoundManager.Instance.PlayMusic(bossSong);
+        SoundManager.Instance.StartSmoothly(bossSong);
     }
 
     void OnStartLevelMusic()
@@ -81,7 +81,7 @@ public class AudioManager : MonoBehaviour
 
     void OnStartResultsMusic()
     {
-        SoundManager.Instance.PlayMusic(resultsTheme);
+        SoundManager.Instance.StartSmoothly(resultsTheme);
     }
 
     void OnClawHit()

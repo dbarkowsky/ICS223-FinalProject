@@ -163,8 +163,8 @@ public class CrabController : MonoBehaviour
 
         // Shoot
         body.SetFiringPattern(FiringPattern.CrabMouthSprinkler);
-        body.SetFiringRepetitions(2);
-        body.animationTime = 10f;
+        body.SetFiringRepetitions(1);
+        body.animationTime = 6f;
         StartCoroutine(body.Fire());
         canAttack = true;
     }
