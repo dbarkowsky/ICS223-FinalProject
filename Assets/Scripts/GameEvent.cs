@@ -36,6 +36,7 @@ public static class GameEvent
 
     // Sound Effects
     public const string EXPLOSION = "EXPLOSION";
+    public const string MEOW = "MEOW";
 
     // Boss Sounds
     public const string CLAW_HIT = "CLAW_HIT";
