@@ -7,11 +7,13 @@ public class SpeechBubbleController : MonoBehaviour
 {
     private TextMeshProUGUI bubble;
     private Coroutine currentScript;
-    [SerializeField] float typingSpeed = 0.05f;
+    [SerializeField] float typingSpeed = 0.1f;
     [SerializeField] Animator anim;
 
     private float timeSinceLastTalk = 0f;
     private float deadAirTimeLimit = 20f;
+
+    private bool currentlyTalking = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,21 +34,23 @@ public class SpeechBubbleController : MonoBehaviour
     private void Awake()
     {
         Messenger.AddListener(GameEvent.START_LEVEL_MUSIC, OnStartLevel);
-        Messenger.AddListener(GameEvent.START_BOSS_MUSIC, OnStartBoss);
+        Messenger.AddListener(GameEvent.START_BOSS_MUSIC, OnStartBossMusic);
         Messenger.AddListener(GameEvent.CRAB_DESTROYED, OnCrabDestroyed);
         Messenger.AddListener(GameEvent.PICKUP_NOTIFICATION, OnPickupSeen);
-        Messenger.AddListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
+        Messenger<PickupController>.AddListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
         Messenger.AddListener(GameEvent.PLAYER_DEAD, OnPlayerDead);
+        Messenger.AddListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
     }
 
     private void OnDestroy()
     {
         Messenger.RemoveListener(GameEvent.START_LEVEL_MUSIC, OnStartLevel);
-        Messenger.RemoveListener(GameEvent.START_BOSS_MUSIC, OnStartBoss);
+        Messenger.RemoveListener(GameEvent.START_BOSS_MUSIC, OnStartBossMusic);
         Messenger.RemoveListener(GameEvent.CRAB_DESTROYED, OnCrabDestroyed);
         Messenger.RemoveListener(GameEvent.PICKUP_NOTIFICATION, OnPickupSeen);
-        Messenger.RemoveListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
+        Messenger<PickupController>.RemoveListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
         Messenger.RemoveListener(GameEvent.PLAYER_DEAD, OnPlayerDead);
+        Messenger.RemoveListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
     }
 
     void OnStartLevel()
@@ -54,7 +58,7 @@ public class SpeechBubbleController : MonoBehaviour
         CatSays(pressZ);
     }
 
-    void OnStartBoss()
+    void OnStartBossMusic()
     {
         CatSays(bossStart);
     }
@@ -64,7 +68,7 @@ public class SpeechBubbleController : MonoBehaviour
         CatSays(pickups);
     }
 
-    void OnPickupTouched()
+    void OnPickupTouched(PickupController pickup)
     {
         CatSays(pickupTouched);
     }
@@ -80,14 +84,24 @@ public class SpeechBubbleController : MonoBehaviour
         CatSays(death[option]);
     }
 
+    void OnStartBossBattle()
+    {
+        CatSays(bossSeen);
+    }
+
     private void CatSays(string phrase)
     {
-        if (currentScript != null)
+        if (!currentlyTalking)
         {
-            StopCoroutine(currentScript);
-            anim.SetBool("isTalking", false);
-        }
-        currentScript = StartCoroutine(WriteToBubble(phrase));
+            currentlyTalking = true;
+            if (currentScript != null)
+            {
+                StopCoroutine(currentScript);
+                anim.SetBool("isTalking", false);
+            }
+            timeSinceLastTalk = 0f;
+            currentScript = StartCoroutine(WriteToBubble(phrase));
+        }     
     }
 
     private IEnumerator WriteToBubble(string contents)
@@ -99,6 +113,7 @@ public class SpeechBubbleController : MonoBehaviour
             Messenger.Broadcast(GameEvent.MEOW);
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
+        currentlyTalking = false;
         anim.SetBool("isTalking", false);
     }
 
@@ -127,5 +142,6 @@ public class SpeechBubbleController : MonoBehaviour
     private string pickups = "Grab those pickups for better guns.";
     private string pickupTouched = "That's right. Blast them!";
     private string bossStart = "What's that up ahead? Sounds big.";
+    private string bossSeen = "Shoot him in the head!";
     private string bossDeath = "Yum. That should be enough crab for dinner.";
 }
