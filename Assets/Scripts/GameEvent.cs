@@ -33,6 +33,7 @@ public static class GameEvent
 
     // Items
     public const string PICKUP_TOUCHED = "PICKUP_TOUCHED";
+    public const string PICKUP_NOTIFICATION = "PICKUP_NOTIFICATION";
 
     // Sound Effects
     public const string EXPLOSION = "EXPLOSION";

@@ -5,7 +5,8 @@ using UnityEngine;
 public enum GenericTrigger
 {
     StartBossMusic,
-    ArriveAtBossArea
+    ArriveAtBossArea,
+    PickupNotification
 }
 public class GenericTriggerController : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class GenericTriggerController : MonoBehaviour
             case GenericTrigger.ArriveAtBossArea:
                 Messenger.Broadcast(GameEvent.STOP_CAMERA);
                 Messenger.Broadcast(GameEvent.START_BOSS_BATTLE);
+                break;
+            case GenericTrigger.PickupNotification:
+                Messenger.Broadcast(GameEvent.PICKUP_NOTIFICATION);
                 break;
         }
         Destroy(this.gameObject);

@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip playerShooting;
     [SerializeField] AudioClip explosion;
     [SerializeField] AudioClip meow;
+    [SerializeField] AudioClip pickup;
 
     // Songs
     [SerializeField] AudioClip levelSong;
@@ -47,6 +48,7 @@ public class AudioManager : MonoBehaviour
         Messenger.AddListener(GameEvent.LASER_SHOOT, OnLaserShoot);
         Messenger.AddListener(GameEvent.BOSS_YELL, OnBossYell);
         Messenger.AddListener(GameEvent.MEOW, OnMeow);
+        Messenger.AddListener(GameEvent.PICKUP_TOUCHED, OnPickup);
     }
 
     private void OnDestroy()
@@ -61,6 +63,7 @@ public class AudioManager : MonoBehaviour
         Messenger.RemoveListener(GameEvent.LASER_SHOOT, OnLaserShoot);
         Messenger.RemoveListener(GameEvent.BOSS_YELL, OnBossYell);
         Messenger.RemoveListener(GameEvent.MEOW, OnMeow);
+        Messenger.RemoveListener(GameEvent.PICKUP_TOUCHED, OnPickup);
     }
 
     void OnPlayerShoots()
@@ -70,6 +73,11 @@ public class AudioManager : MonoBehaviour
     void OnExplosion()
     {
         SoundManager.Instance.PlaySfx(explosion);
+    }
+
+    void OnPickup()
+    {
+        SoundManager.Instance.PlaySfx(pickup);
     }
 
     void OnMeow()

@@ -9,21 +9,75 @@ public class SpeechBubbleController : MonoBehaviour
     private Coroutine currentScript;
     [SerializeField] float typingSpeed = 0.05f;
     [SerializeField] Animator anim;
+
+    private float timeSinceLastTalk = 0f;
+    private float deadAirTimeLimit = 20f;
     // Start is called before the first frame update
     void Start()
     {
         bubble = this.gameObject.GetComponent<TextMeshProUGUI>();
-        CatSays("Press Z to shoot 'em!");
+    }
+
+    private void Update()
+    {
+        timeSinceLastTalk += Time.deltaTime;
+        if (timeSinceLastTalk > deadAirTimeLimit)
+        {
+            timeSinceLastTalk = 0f;
+            int option = Random.Range(0, other.Length);
+            CatSays(other[option]);
+        }
     }
 
     private void Awake()
     {
-
+        Messenger.AddListener(GameEvent.START_LEVEL_MUSIC, OnStartLevel);
+        Messenger.AddListener(GameEvent.START_BOSS_MUSIC, OnStartBoss);
+        Messenger.AddListener(GameEvent.CRAB_DESTROYED, OnCrabDestroyed);
+        Messenger.AddListener(GameEvent.PICKUP_NOTIFICATION, OnPickupSeen);
+        Messenger.AddListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
+        Messenger.AddListener(GameEvent.PLAYER_DEAD, OnPlayerDead);
     }
 
     private void OnDestroy()
     {
+        Messenger.RemoveListener(GameEvent.START_LEVEL_MUSIC, OnStartLevel);
+        Messenger.RemoveListener(GameEvent.START_BOSS_MUSIC, OnStartBoss);
+        Messenger.RemoveListener(GameEvent.CRAB_DESTROYED, OnCrabDestroyed);
+        Messenger.RemoveListener(GameEvent.PICKUP_NOTIFICATION, OnPickupSeen);
+        Messenger.RemoveListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
+        Messenger.RemoveListener(GameEvent.PLAYER_DEAD, OnPlayerDead);
+    }
 
+    void OnStartLevel()
+    {
+        CatSays(pressZ);
+    }
+
+    void OnStartBoss()
+    {
+        CatSays(bossStart);
+    }
+
+    void OnPickupSeen()
+    {
+        CatSays(pickups);
+    }
+
+    void OnPickupTouched()
+    {
+        CatSays(pickupTouched);
+    }
+
+    void OnCrabDestroyed()
+    {
+        CatSays(bossDeath);
+    }
+
+    void OnPlayerDead()
+    {
+        int option = Random.Range(0, death.Length);
+        CatSays(death[option]);
     }
 
     private void CatSays(string phrase)
@@ -51,17 +105,27 @@ public class SpeechBubbleController : MonoBehaviour
     private string[] death = {
         "Try hitting them before they hit you.",
         "I believe in you! Don't give up!",
-        "Snake! Snaaaaaaaake!"
+        "Snake!? Snaaaaaaaake!", 
+        "No, no! Avoid the bullets!",
+        "Did you forget your goggles?",
+        "Don't worry. Cats have nine lives.",
+        "I've seen better flying from a penguin.",
+        "Just a minor setback.",
+        "This must be revenge for all the tuna I ate."
     };
 
     private string[] other =
     {
         "Do a barrel roll!",
-        "You've switched off your targeting computer. What's wrong?"
+        "You've switched off your targeting computer. What's wrong?",
+        "Do you ever wonder why we're here?",
+        "Robot fish? Are they delicious?",
+        "I'd kill for a bit of catnip right now."
     };
 
     private string pressZ = "Press Z to shoot 'em!";
     private string pickups = "Grab those pickups for better guns.";
+    private string pickupTouched = "That's right. Blast them!";
     private string bossStart = "What's that up ahead? Sounds big.";
     private string bossDeath = "Yum. That should be enough crab for dinner.";
 }
