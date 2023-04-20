@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Controls the starting splash page
 public class SplashPageController : MonoBehaviour
 {
     [SerializeField] CanvasRenderer splash;
-    [SerializeField] float fadeDelta = 0.001f;
+    [SerializeField] float fadeDelta = 0.001f; // how fast the screen will fade. Smaller is slower
     [SerializeField] AudioClip titleTheme;
     [SerializeField] AudioClip startSound;
-    // Start is called before the first frame update
+    
+    // Start the title theme
     void Start()
     {
         SoundManager.Instance.PlayMusic(titleTheme);
     }
 
-    // Update is called once per frame
+    // IF the user hits Enter, fade out
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -26,13 +28,13 @@ public class SplashPageController : MonoBehaviour
         }
     }
 
+    // Fades the screen to black, then loads the next scene
     IEnumerator FadeToBlack()
     {
         Color current = splash.GetColor();
-        Debug.Log(current);
         while (current.g > 0)
         {
-            yield return new WaitForSecondsRealtime(0.00025f);
+            yield return new WaitForSeconds(0.00025f);
             current.r -= fadeDelta;
             current.b -= fadeDelta;
             current.g -= fadeDelta;

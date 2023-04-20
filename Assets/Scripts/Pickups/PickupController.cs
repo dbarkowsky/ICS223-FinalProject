@@ -8,24 +8,28 @@ public enum PickupType
     BulletSpread
 }
 
+// Controls the behaviour of pickup items
 public class PickupController : MonoBehaviour
 {
     [SerializeField] Sprite secondarySprite;
     private Sprite primarySprite;
     private int state; // 0 = primary, 1 = secondary
-    // Start is called before the first frame update
     [SerializeField] private PickupType type;
+
+    // Start flashing
     void Start()
     {
         primarySprite = GetComponent<SpriteRenderer>().sprite;
         StartCoroutine(Flash());
     }
 
+    // Animates the pickup by alternating between two sprites
+    // Could have used an animation for this, but...  
     IEnumerator Flash()
     {
         while (true)
         {
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSeconds(0.5f);
             switch (state)
             {
                 case 0:
@@ -42,6 +46,7 @@ public class PickupController : MonoBehaviour
         }
     }
 
+    // When the player collides 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -51,6 +56,7 @@ public class PickupController : MonoBehaviour
         }
     }
 
+    // What type is it?
     public PickupType GetPickupType()
     {
         return type;

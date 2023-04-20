@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Controls explosion behaviours
 public class ExplosionController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -10,15 +11,10 @@ public class ExplosionController : MonoBehaviour
         StartCoroutine(DestroyAfterAnimation());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Destroys sprite after some time
     IEnumerator DestroyAfterAnimation()
     {
-        yield return new WaitForSecondsRealtime(0.8f);
+        yield return new WaitForSeconds(0.8f);
         Destroy(this.gameObject);
     }
 }

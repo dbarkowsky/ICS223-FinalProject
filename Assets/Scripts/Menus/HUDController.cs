@@ -6,6 +6,7 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+// Controls all HUD elements from a high level
 public class HUDController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timer;
@@ -24,24 +25,21 @@ public class HUDController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI endPrompt;
     private bool canRestart = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
+    // Updates the HUD and listens for end-game input
     void Update()
     {
+        // update time
         timePassed += Time.deltaTime;
         timer.text = "Time: " + CalculateTime();
 
+        // Listen for pause command
         if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenu.IsActive())
         {
             SetGameActive(false);
             pauseMenu.Open();
         }
 
+        // Listen for restart from results screen
         if (Input.GetKeyDown(KeyCode.Return) && canRestart)
         {
             canRestart = false;
@@ -56,6 +54,7 @@ public class HUDController : MonoBehaviour
         }
     }
 
+    // Pauses or unpauses the game
     public void SetGameActive(bool active)
     {
         if (active)
@@ -72,6 +71,7 @@ public class HUDController : MonoBehaviour
         }
     }
 
+    // Converts the time into a normal clock time
     private string CalculateTime()
     {
         float minutes = Mathf.FloorToInt(timePassed / 60);
@@ -79,11 +79,13 @@ public class HUDController : MonoBehaviour
         return string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
+    // Updates the results screen text
     private void UpdateFinalScore()
     {
         endStats.text = "Time: " + CalculateTime() + "\nScore: " + scoreValue + "\nDeaths: " + deathCount;
     }
 
+    // Fades the screen to the results screen
     private IEnumerator FadeToScoreEnum()
     {
         UpdateFinalScore();
@@ -105,9 +107,9 @@ public class HUDController : MonoBehaviour
         endScreen.color = new Color(endScreen.color.r, endScreen.color.g, endScreen.color.b, 1f);
         Messenger.Broadcast(GameEvent.START_RESULTS_MUSIC);
         endTitle.gameObject.SetActive(true);
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSeconds(0.5f);
         endStats.gameObject.SetActive(true);
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSeconds(1f);
         endPrompt.gameObject.SetActive(true);
         canRestart = true;
         yield break;
@@ -153,11 +155,13 @@ public class HUDController : MonoBehaviour
         SetGameActive(true);
     }
 
+    // Add to death count, update text
     private void OnPlayerDead()
     {
         deaths.text = "Deaths: " + (++deathCount).ToString();
     }
 
+    // Add to score value, update text
     private void OnEnemyDestroyed(GameObject enemy)
     {
         scoreValue += enemy.GetComponent<EnemyController>().scoreValue;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Declare the various FiringPattern options
 public enum FiringPattern
 {
     SingleShot,
@@ -22,18 +23,19 @@ public enum FiringPattern
     Laser
 }
 
+// Controls a single firing point
 public class FiringPointController : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
     [SerializeField] FiringPattern pattern;
-    public bool isActive = true;
+    public bool isActive = true; // is on or off
     private bool canShoot = true; // used to handle cooldown between shots
     [SerializeField] float cooldown = 0.125f;
     [SerializeField] int repetitions = 1;
-    private Vector2 playerPosition;
+    private Vector2 playerPosition; // for aiming
     private float laserAngle = 0f;
 
-
+    // Need to get occassional player location in order to aim
     private void Awake()
     {
         Messenger<Vector2>.AddListener(GameEvent.PLAYER_LOCATION, OnPlayerLocationReceived);
@@ -44,26 +46,31 @@ public class FiringPointController : MonoBehaviour
         Messenger<Vector2>.RemoveListener(GameEvent.PLAYER_LOCATION, OnPlayerLocationReceived);
     }
 
+    // Set the player position
     private void OnPlayerLocationReceived(Vector2 playerPosition)
     {
         this.playerPosition = playerPosition;
     }
 
+    // Set the firing pattern
     public void SetPattern(FiringPattern newPattern)
     {
         pattern = newPattern;
     }
 
+    // Set the number of repetitions per pattern
     public void SetRepetitions(int repetitions)
     {
         this.repetitions = repetitions;
     }
 
+    // Sets the angle for the laser
     public void SetLaserAngle(float angle)
     {
         laserAngle = ConvertRadiansToDegrees(angle);
     }
 
+    // Adds or subtracts an amount from the firing point cooldown
     public void AdjustCooldown(float delta)
     {
         cooldown += delta;
@@ -73,6 +80,7 @@ public class FiringPointController : MonoBehaviour
         }
     }
 
+    // Fires the point, starting a coroutine for a selected pattern
     public void Fire()
     {
         if (isActive && canShoot)
@@ -130,6 +138,7 @@ public class FiringPointController : MonoBehaviour
         }
     }
 
+    // Checks if the point can shoot or not
     public bool pointCanShoot()
     {
         return canShoot && isActive;
@@ -142,7 +151,7 @@ public class FiringPointController : MonoBehaviour
         Vector3 pos = transform.position;
         Quaternion rotation = transform.rotation;
         Instantiate(bullet, pos, rotation);
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -154,19 +163,18 @@ public class FiringPointController : MonoBehaviour
         float bulletOffset = 0.25f;
         Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation);
         Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation);
-        yield return new WaitForSecondsRealtime(cooldown / 1.2f);
+        yield return new WaitForSeconds(cooldown / 1.2f);
         canShoot = true;
     }
 
     private IEnumerator Laser()
     {
-        Debug.Log(laserAngle);
         canShoot = false;
         Vector3 pos = transform.position;
         Quaternion rotation = transform.rotation;
         GameObject newBullet = Instantiate(bullet, pos, rotation);
         newBullet.GetComponent<BulletController>().SetAngle(laserAngle - 290);
-        yield return new WaitForSecondsRealtime(cooldown / 2f);
+        yield return new WaitForSeconds(cooldown / 2f);
         canShoot = true;
     }
 
@@ -179,7 +187,7 @@ public class FiringPointController : MonoBehaviour
         Instantiate(bullet, pos, rotation);
         Instantiate(bullet, pos + new Vector3(bulletOffset, 0, 0), rotation);
         Instantiate(bullet, pos - new Vector3(bulletOffset, 0, 0), rotation);
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -198,7 +206,7 @@ public class FiringPointController : MonoBehaviour
         rotation.z -= 5f;
         GameObject bullet3 = Instantiate(bullet, pos, rotation);
         bullet3.GetComponent<BulletController>().SetAngle(360-spread);
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -213,7 +221,7 @@ public class FiringPointController : MonoBehaviour
         bullet2.GetComponent<BulletController>().SetAngle(spread);
         GameObject bullet3 = Instantiate(bullet, pos, rotation);
         bullet3.GetComponent<BulletController>().SetAngle(360 - spread);
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -231,10 +239,10 @@ public class FiringPointController : MonoBehaviour
                 Quaternion rotation = transform.rotation;
                 GameObject newBullet = Instantiate(bullet, pos, rotation);
                 newBullet.GetComponent<BulletController>().SetAngle(projectile * projectileSpreadDegrees);
-                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+                yield return new WaitForSeconds(secondsBetweenBullets);
             }
         }
-        yield return new WaitForSecondsRealtime(cooldown); 
+        yield return new WaitForSeconds(cooldown); 
         canShoot = true;
     }
 
@@ -254,10 +262,10 @@ public class FiringPointController : MonoBehaviour
                 bullet1.GetComponent<BulletController>().SetAngle((projectile * projectileSpreadDegrees) % 360);
                 GameObject bullet2 = Instantiate(bullet, pos, rotation);
                 bullet2.GetComponent<BulletController>().SetAngle(((projectile * projectileSpreadDegrees) + 180) % 360);
-                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+                yield return new WaitForSeconds(secondsBetweenBullets);
             }
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -274,9 +282,9 @@ public class FiringPointController : MonoBehaviour
             bullet1.GetComponent<BulletController>().SetAngle((round * projectileSpreadDegrees) % 360);
             GameObject bullet2 = Instantiate(bullet, pos, rotation);
             bullet2.GetComponent<BulletController>().SetAngle(((round * projectileSpreadDegrees) + 180) % 360);
-            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            yield return new WaitForSeconds(secondsBetweenBullets);
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -295,7 +303,7 @@ public class FiringPointController : MonoBehaviour
                 newBullet.GetComponent<BulletController>().SetAngle(projectile * projectileSpreadDegrees);
             }
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -309,9 +317,9 @@ public class FiringPointController : MonoBehaviour
             Quaternion rotation = transform.rotation;
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle(0);
-            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            yield return new WaitForSeconds(secondsBetweenBullets);
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -323,7 +331,7 @@ public class FiringPointController : MonoBehaviour
         Vector2 points2DPosition = new Vector2(pos.x, pos.y);
         GameObject bullet1 = Instantiate(bullet, pos, rotation);
         bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -337,9 +345,9 @@ public class FiringPointController : MonoBehaviour
             Quaternion rotation = transform.rotation;
             GameObject bullet1 = Instantiate(bullet, pos, rotation);
             bullet1.GetComponent<BulletController>().SetAngle(GetAngleToPlayer());
-            yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+            yield return new WaitForSeconds(secondsBetweenBullets);
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -359,10 +367,10 @@ public class FiringPointController : MonoBehaviour
                 bullet1.GetComponent<BulletController>().SetAngle((projectile * projectileSpreadDegrees) % 360);
                 GameObject bullet2 = Instantiate(bullet, pos, rotation);
                 bullet2.GetComponent<BulletController>().SetAngle(((projectile * projectileSpreadDegrees) + 180) % 360);
-                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+                yield return new WaitForSeconds(secondsBetweenBullets);
             }
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
@@ -387,7 +395,7 @@ public class FiringPointController : MonoBehaviour
                 float angle = (angleOfSpray - angleOffset - (projectile * projectileSpreadDegrees));
                 if (angle <= 0) { angle = 359 - Mathf.Abs(angle); }
                 bullet1.GetComponent<BulletController>().SetAngle(angle);
-                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+                yield return new WaitForSeconds(secondsBetweenBullets);
             }
             projectileSpreadDegrees = 12;
             projectilesWithinAngle = angleOfSpray / projectileSpreadDegrees;
@@ -400,13 +408,14 @@ public class FiringPointController : MonoBehaviour
                 float angle = (angleOfSpray - angleOffset - (projectile * projectileSpreadDegrees));
                 if (angle <= 0) { angle = 359 - Mathf.Abs(angle); }
                 bullet1.GetComponent<BulletController>().SetAngle(angle);
-                yield return new WaitForSecondsRealtime(secondsBetweenBullets);
+                yield return new WaitForSeconds(secondsBetweenBullets);
             }
         }
-        yield return new WaitForSecondsRealtime(cooldown);
+        yield return new WaitForSeconds(cooldown);
         canShoot = true;
     }
 
+    // Determines the angle needed to fire at the player, based on their last known location
     private float GetAngleToPlayer()
     {
         float absoluteAngle;
@@ -462,6 +471,7 @@ public class FiringPointController : MonoBehaviour
         return (absoluteAngle + 180) % 360; // because otherwise it fires the wrong way...
     }
 
+    // Converts radians to degrees, because the angle for shooting is in degrees
     private float ConvertRadiansToDegrees(float radians)
     {
         // Angle in Radians × 180°/ PI

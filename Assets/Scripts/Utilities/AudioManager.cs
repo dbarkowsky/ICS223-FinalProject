@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Controls interaction with the SoundManager
+// Essentially a single point to store audio, catch events, ask SoundManager to play
 public class AudioManager : MonoBehaviour
 {
     // General Sounds
@@ -23,18 +25,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip clawSwipe;
     
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void Awake()
     {
         Messenger.AddListener(GameEvent.PLAYER_SHOOTS, OnPlayerShoots);

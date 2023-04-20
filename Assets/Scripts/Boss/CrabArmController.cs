@@ -2,21 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Controlls the behaviour of a single crab arm
 public class CrabArmController : MonoBehaviour
 {
-    private enum ClawStates { 
-        Protect,
-        FollowPlayer,
-        Freeze,
-        Open
-    }
-
     [SerializeField] private float armSpeed = 0.1f;
     [SerializeField] private GameObject laser;
     [SerializeField] private GameObject laserWarning;
     public bool canShoot = true;
 
-
+    // Fires the laser beams
     public void Fire()
     {
         if (canShoot)
@@ -28,20 +22,22 @@ public class CrabArmController : MonoBehaviour
         }
     }
 
+    // Actually generates the lazer beams
     private IEnumerator FireLaser()
     {
         canShoot = false;
         laserWarning.SetActive(true);
         Messenger.Broadcast(GameEvent.LASER_CHARGE);
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSeconds(0.5f);
         laser.SetActive(true);
         laserWarning.SetActive(false);
         Messenger.Broadcast(GameEvent.LASER_SHOOT);
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSeconds(1f);
         laser.SetActive(false);
         canShoot = true;
     }
 
+    // Handle collisions with other objects
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("PlayerBullet"))
@@ -55,11 +51,14 @@ public class CrabArmController : MonoBehaviour
         }
     }
 
+    // Starts coroutine to move arm
     public void RotateArm(float degrees, float speed)
     {
         StartCoroutine(RotateArmEnum(degrees, speed));
         
     }
+
+    // Moves the arm to a specified degree
     // 0 is right, 90 is up, 180 is left, 270 down
     public IEnumerator RotateArmEnum(float degrees, float speed)
     {

@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Types of triggers
 public enum GenericTrigger
 {
     StartBossMusic,
     ArriveAtBossArea,
     PickupNotification
 }
+
+// Controls the generic trigger objects
 public class GenericTriggerController : MonoBehaviour
 {
     [SerializeField] GenericTrigger triggerType = 0;
     private bool triggered = false;
+
+    // When collision with the trigger-er, announce the event
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!triggered)
@@ -24,6 +29,7 @@ public class GenericTriggerController : MonoBehaviour
         }
     }
 
+    // Announces the event/trigger type and destroys itself
     void AnnounceTrigger()
     {
         switch (triggerType)

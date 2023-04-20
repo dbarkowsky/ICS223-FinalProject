@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Main game manager. Controls high-level game functions.
 public class GameManager : MonoBehaviour
 {
     [SerializeField] PlayerController player;
@@ -14,12 +15,6 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(BroadcastPlayerLocation());
         Messenger.Broadcast(GameEvent.START_LEVEL_MUSIC);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void Awake()
@@ -39,15 +34,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine(EndGame());
     }
 
+    // Disable the player and push them out of the screen
     private IEnumerator EndGame()
     {
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSeconds(3f);
         player.Disable();
         float exitDuration = 6f;
         StartCoroutine(player.ExitTopOfScreen(exitDuration));
-        yield return new WaitForSecondsRealtime(exitDuration);
+        yield return new WaitForSeconds(exitDuration);
     }
 
+    // Creates explosion on player's location and respawns player
     private void OnPlayerDead()
     {
         if (player.canBeHit)
@@ -59,13 +56,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Broadcasts the player's location on repeat
     private IEnumerator BroadcastPlayerLocation()
     {
         while (true)
         {
             Vector2 playerCoordinates = new Vector2(player.transform.position.x, player.transform.position.y);
             Messenger<Vector2>.Broadcast(GameEvent.PLAYER_LOCATION, playerCoordinates);
-            yield return new WaitForSecondsRealtime(0.3f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 

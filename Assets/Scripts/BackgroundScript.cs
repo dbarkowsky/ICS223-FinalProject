@@ -4,18 +4,15 @@ using UnityEngine;
 
 // Note: ideal image is 500px wide. Every 1000 pixels tall at scroll speed 0.025 takes 40 seconds to loop
 // Goal is for 4 minutes of play, so 6000x500 is ideal height + beginning and ending segments
+
+// Controls the behaviour of scrolling backgrounds
 public class BackgroundScript : MonoBehaviour
 {
     public float scrollSpeed;
     [SerializeField] private Renderer rend;
     private bool isScrolling = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
+    // Scroll the background if active
     void Update()
     {
         if (isScrolling)

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// The base class for all popups
 public class BasePopup : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Opens the popup
     virtual public void Open()
     {
         if (!IsActive())
@@ -18,6 +19,7 @@ public class BasePopup : MonoBehaviour
         }
     }
 
+    // Closes the popup
     virtual public void Close()
     {
         if (IsActive())
@@ -31,6 +33,7 @@ public class BasePopup : MonoBehaviour
         }
     }
 
+    // Checks if the popup is active
     public bool IsActive()
     {
         return gameObject.activeSelf;

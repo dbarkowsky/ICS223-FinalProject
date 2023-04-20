@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Manages spawning of enemies, their states, and their deaths
 public class EnemyManager : MonoBehaviour
 {
+    // Declaration of possible enemy types
     private enum EnemyPrefabs
     {
         GoldfishDownUp,
@@ -20,22 +22,16 @@ public class EnemyManager : MonoBehaviour
         Turtle
     }
 
-    private List<GameObject> enemies = new List<GameObject>();
+    private List<GameObject> enemies = new List<GameObject>(); // spawned enemies stored here
     [SerializeField] private List<GameObject> spawnPoints;
     [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject crater;
     [SerializeField] private CrabController crab;
 
-    [SerializeField] Camera cam;
+    [SerializeField] Camera cam; // To determine if enemies are on screen
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
+    // For all spawned enemies, check if they are on screen still (can fire) or below the screen (should be removed)
     void Update()
     {
         List<GameObject> enemiesCopy = new List<GameObject>(enemies); // copy to avoid changing list while iterating through it
@@ -70,12 +66,14 @@ public class EnemyManager : MonoBehaviour
 
     }
 
+    // Stop the crab, start the explosions
     private void OnCrabDestroyed()
     {
         crab.Fight(false); // stop attacking
         StartCoroutine(CrabExplode());
     }
 
+    // Randomize some explosions around the crab, then one big explosion before deleting crab and telling game to proceed to score
     private IEnumerator CrabExplode()
     {
         GameObject exp;
@@ -86,7 +84,7 @@ public class EnemyManager : MonoBehaviour
             explosionSize = Random.Range(1, 4);
             exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
             Messenger.Broadcast(GameEvent.EXPLOSION);
-            yield return new WaitForSecondsRealtime(0.25f);
+            yield return new WaitForSeconds(0.25f);
         }
         // One big explosion
         exp = Instantiate(explosion, crab.transform.position - new Vector3(3.5f, 0, 0), crab.transform.rotation);
@@ -97,6 +95,7 @@ public class EnemyManager : MonoBehaviour
         Messenger.Broadcast(GameEvent.FADE_TO_SCORE);
     }
 
+    // When an enemy trigger is reached, starts spawning coroutine based on triggerType
     private void OnEnemyTriggerReached(TriggerType triggerType)
     {
         switch (triggerType)
@@ -151,35 +150,42 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    // When an enemy is destroyed...
     private void OnEnemyDestroyed(GameObject enemy)
     {
+        // Make sure it's still around
         if (enemy != null)
         {
-            Debug.Log(this + " Enemy destroyed.");
+            // Create an explosion
             GameObject exp = Instantiate(explosion, enemy.transform.position + enemy.transform.localScale / 2, enemy.transform.rotation);
             float explosionSize = enemy.GetComponent<EnemyController>().explosionSize;
             exp.transform.localScale = new Vector3(explosionSize, explosionSize, 1);
             
+            // If it's a land enemy, leave a mark
             if (enemy.CompareTag("EnemyLand"))
             {
                 GameObject burnMark = Instantiate(crater, enemy.transform.position + enemy.transform.localScale / 2, enemy.transform.rotation);
                 float burnMarkSize = enemy.GetComponent<EnemyController>().explosionSize;
                 burnMark.transform.localScale = new Vector3(burnMarkSize, burnMarkSize, 1);
             }
+            // Destroy the object
             DestroyEnemy(enemy); 
         }
     }
 
+    // Crab can now fight
     private void OnStartBossBattle()
     {
         crab.Fight(true);
     }
 
+    // Turns on the hitboxes
     private void OnStartBossMusic()
     {
         crab.SetHitBoxes(true);
     }
 
+    // Removes enemy from list and destroys object
     private void DestroyEnemy(GameObject enemy)
     {
         int index = enemies.IndexOf(enemy);
@@ -314,11 +320,11 @@ public class EnemyManager : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
         enemy.transform.position = spawnPoints[3].transform.position;
         enemies.Add(enemy);
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSeconds(0.5f);
         enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
         enemy.transform.position = spawnPoints[6].transform.position;
         enemies.Add(enemy);
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSeconds(0.5f);
         enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishDownUp], this.transform);
         enemy.transform.position = spawnPoints[Random.Range(4, 6)].transform.position;
         enemies.Add(enemy);
@@ -337,7 +343,7 @@ public class EnemyManager : MonoBehaviour
             enemy = Instantiate(enemyPrefabs[(int)EnemyPrefabs.GoldfishRight], this.transform);
             enemy.transform.position = spawnPoints[firstRightSpawn + i].transform.position;
             enemies.Add(enemy);
-            yield return new WaitForSecondsRealtime(0.7f);
+            yield return new WaitForSeconds(0.7f);
         }
     }
 }

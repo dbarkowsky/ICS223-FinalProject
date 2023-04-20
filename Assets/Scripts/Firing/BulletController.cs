@@ -8,6 +8,7 @@ public enum BulletType
     Enemy
 }
 
+// Controls a single bullet instance
 public class BulletController : MonoBehaviour
 {
     public float speed = 30f;
@@ -16,33 +17,32 @@ public class BulletController : MonoBehaviour
     private float angle = 0f; // IN DEGREES! TRIG FUNCTIONS DON'T WORK LIKE THIS, CONVERT TO RADIANS BEFORE TRIG
     [SerializeField] BulletType type;
     [SerializeField] float timeToLive = 5f;
-    bool gameIsPaused = false;
 
-    // Start is called before the first frame update
+    // Determine direction and start self-destruct coroutine
     void Start()
     {
         SetDirection();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        gameIsPaused = Time.timeScale == 0;
-        transform.position += (direction * speed * Time.deltaTime);
-        if (type == BulletType.Enemy)
-        {
-            transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);// Quaternion.Euler(Vector3.forward * rotateSpeed * Time.deltaTime);
-        }
         StartCoroutine(DestroyMe());
     }
 
+    // Move the bullet. Rotate if enemy bullet
+    void Update()
+    {
+        transform.position += (direction * speed * Time.deltaTime);
+        if (type == BulletType.Enemy)
+        {
+            transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime); // Quaternion.Euler(Vector3.forward * rotateSpeed * Time.deltaTime);
+        } 
+    }
+
+    // Destroys the object after some time. Helps keep object under control
     IEnumerator DestroyMe()
     {
-        yield return new WaitForSecondsRealtime(timeToLive);
-        //while (gameIsPaused) yield return new WaitForSecondsRealtime(timeToLive); // tried to avoid disappearing bullets on pause, but here is a catchup which is even worse
+        yield return new WaitForSeconds(timeToLive);
         Destroy(gameObject);
     }
 
+    // Uses a provided angle to determine the appropriate x and y velocities that would create that vector
     private void SetDirection()
     {
         // determine x and y velocities based on angle
@@ -100,17 +100,15 @@ public class BulletController : MonoBehaviour
         // flip if it's an enemy bullet
         if (type == BulletType.Enemy)
         {
-            //Debug.Log("enemy fire");
             xVelocity *= -1;
             yVelocity *= -1;
         }
-        //Debug.Log("relative: " + relativeAngle.ToString());
-        //Debug.Log(xVelocity.ToString() + ", " + yVelocity.ToString());
 
         // save as the direction
         direction = new Vector3(xVelocity, yVelocity, 0);
     }
 
+    // Sets the angle of the bullet
     public void SetAngle(float newAngle)
     {
         angle = newAngle;
@@ -121,6 +119,7 @@ public class BulletController : MonoBehaviour
         SetDirection();
     }
 
+    // Converts degrees to radians, because the Mathf functions only use radians.
     private float ConvertDegreesToRadians(float degrees)
     {
         float radians = (Mathf.PI / 180) * degrees;

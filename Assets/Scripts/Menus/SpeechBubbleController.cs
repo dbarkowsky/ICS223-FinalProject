@@ -3,23 +3,28 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+// Controls printing text to the plane cat's speech bubble.
 public class SpeechBubbleController : MonoBehaviour
 {
-    private TextMeshProUGUI bubble;
+    [SerializeField] private TextMeshProUGUI bubble;
     private Coroutine currentScript;
     [SerializeField] float typingSpeed = 0.1f;
     [SerializeField] Animator anim;
 
+    // For when he goes too long without talking.
     private float timeSinceLastTalk = 0f;
     private float deadAirTimeLimit = 20f;
 
+    // To avoid talking over himself
     private bool currentlyTalking = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        bubble = this.gameObject.GetComponent<TextMeshProUGUI>();
+        if (bubble == null) bubble = this.gameObject.GetComponent<TextMeshProUGUI>();
     }
 
+    // Update if there's too much dead air, says something
     private void Update()
     {
         timeSinceLastTalk += Time.deltaTime;
@@ -70,7 +75,8 @@ public class SpeechBubbleController : MonoBehaviour
 
     void OnPickupTouched(PickupController pickup)
     {
-        CatSays(pickupTouched);
+        int option = Random.Range(0, pickupTouched.Length);
+        CatSays(pickupTouched[option]);
     }
 
     void OnCrabDestroyed()
@@ -89,6 +95,7 @@ public class SpeechBubbleController : MonoBehaviour
         CatSays(bossSeen);
     }
 
+    // Check if already talking, if not, say the phrase
     private void CatSays(string phrase)
     {
         if (!currentlyTalking)
@@ -104,19 +111,23 @@ public class SpeechBubbleController : MonoBehaviour
         }     
     }
 
+    // Prints the string contents to the text box, one character at a time
     private IEnumerator WriteToBubble(string contents)
     {
         anim.SetBool("isTalking", true);
         for (int i = 0; i <= contents.Length; i++)
         {
             bubble.text = contents.Substring(0, i);
-            Messenger.Broadcast(GameEvent.MEOW);
-            yield return new WaitForSecondsRealtime(typingSpeed);
+            Messenger.Broadcast(GameEvent.MEOW); // Talking sound effect
+            yield return new WaitForSeconds(typingSpeed);
         }
         currentlyTalking = false;
         anim.SetBool("isTalking", false);
+        yield return null;
     }
 
+
+    // All phrases stored below
     private string[] death = {
         "Try hitting them before they hit you.",
         "I believe in you! Don't give up!",
@@ -138,9 +149,14 @@ public class SpeechBubbleController : MonoBehaviour
         "I'd kill for a bit of catnip right now."
     };
 
+    private string[] pickupTouched = {
+        "That's right. Blast them!",
+        "Time to bring out the big guns!",
+        "They won't know what hit 'em!"
+    };
+
     private string pressZ = "Press Z to shoot 'em!";
     private string pickups = "Grab those pickups for better guns.";
-    private string pickupTouched = "That's right. Blast them!";
     private string bossStart = "What's that up ahead? Sounds big.";
     private string bossSeen = "Shoot him in the head!";
     private string bossDeath = "Yum. That should be enough crab for dinner.";

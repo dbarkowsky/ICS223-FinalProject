@@ -2,20 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Controls the camera's behaviours
 public class CameraController : MonoBehaviour
 {
     private Vector2 currentPosition;
     private Vector2 endPosition;
     private bool isMoving = true;
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Was used prior to triggering system.
-        //currentPosition = transform.position;
-        //endPosition = new Vector2(currentPosition.x, Constants.endOfLevelY);
-    }
 
-    // Update is called once per frame
+    // Move the camera up if active
     void Update()
     {
         if (isMoving)
@@ -24,11 +18,13 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    // Stops the camera
     public void Stop()
     {
         isMoving = false;
     }
 
+    // Starts moving the camera
     public void Move()
     {
         isMoving = true;

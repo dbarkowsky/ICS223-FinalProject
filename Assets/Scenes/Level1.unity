@@ -5022,6 +5022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f510fd6ad4b7c3247932386b26657b75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bubble: {fileID: 1735789288}
   typingSpeed: 0.05
   anim: {fileID: 1242322837}
 --- !u!114 &1735789288

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Declares the available enemy movement patterns
 public enum MovementPatterns
 {
     Stationary,
@@ -15,6 +16,7 @@ public enum MovementPatterns
     DropDownFloatUp
 }
 
+// Controls enemy behaviours
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private MovementPatterns movementPattern;
@@ -29,7 +31,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] FiringPointController[] firingPoints;
     FiringPointController mainFiringPoint;
 
-    // Start is called before the first frame update
+    // Start the coroutine selected for this enemy
     void Start()
     {
         collider = gameObject.GetComponent<BoxCollider2D>();
@@ -64,7 +66,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    // If the enemy and firing points can fire, do so
     void Update()
     {
         foreach (FiringPointController point in firingPoints)
@@ -76,19 +78,23 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    // Handles collisions
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Reduce hp if player bullet
         if (other.CompareTag("PlayerBullet"))
         {
             Destroy(other.gameObject);
             hp--;
             StartCoroutine(StrobeOnHit());
+            // Enemy dies here
             if (hp <= 0)
             {
                 Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED, this.gameObject);
                 Messenger.Broadcast(GameEvent.EXPLOSION);
             }
         }
+        // If this is an air enemy and collides with player, both die
         if (other.CompareTag("Player") && this.CompareTag("EnemyAir"))
         {
             Messenger<GameObject>.Broadcast(GameEvent.ENEMY_DESTROYED_SELF, this.gameObject);
@@ -97,11 +103,12 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    // Flash the sprite when hit
     IEnumerator StrobeOnHit()
     {
         SpriteRenderer sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
         sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 0.5f);
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSeconds(0.1f);
         sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f);
     }
 
@@ -126,9 +133,10 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    // Enables shooting after a short pause
     private IEnumerator CanShootSoon()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSeconds(0.5f);
         enemyCanShoot = true;
     }
 
@@ -168,7 +176,7 @@ public class EnemyController : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        yield return new WaitForSecondsRealtime(pauseDuration);
+        yield return new WaitForSeconds(pauseDuration);
         timeElapsed = 0;
         while (timeElapsed < durationPerMove)
         {
@@ -335,10 +343,16 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator MoveDownSlowly()
     {
-        while (true)
+        float timeElapsed = 0;
+        float durationPerMove = moveDuration;
+
+        while (timeElapsed < durationPerMove)
         {
-            transform.position = new Vector2(transform.position.x, transform.position.y - 0.005f);
-            yield return null;
+            Vector2 currentPosition = transform.position;
+            float time = timeElapsed / durationPerMove;
+            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 12f), time * Time.deltaTime);
+            timeElapsed += Time.deltaTime;
+            yield return new WaitForSeconds(0.01f);
         }
     }
 }
