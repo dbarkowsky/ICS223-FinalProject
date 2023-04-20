@@ -51,7 +51,7 @@ MonoBehaviour:
   movementPattern: 1
   pauseDuration: 1
   moveDuration: 2
-  scoreValue: 50
+  scoreValue: 100
   explosionSize: 1
   hp: 20
   firingPoints:

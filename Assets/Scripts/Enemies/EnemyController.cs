@@ -345,14 +345,14 @@ public class EnemyController : MonoBehaviour
     {
         float timeElapsed = 0;
         float durationPerMove = moveDuration;
+        Vector3 currentPosition = transform.position;
+        Vector3 targetPosition = currentPosition - new Vector3(0f, 14f, 0f);
 
         while (timeElapsed < durationPerMove)
         {
-            Vector2 currentPosition = transform.position;
-            float time = timeElapsed / durationPerMove;
-            transform.position = Vector2.Lerp(currentPosition, currentPosition - new Vector2(0f, 12f), time * Time.deltaTime);
+            transform.position = Vector3.Lerp(currentPosition, targetPosition, timeElapsed / durationPerMove);
             timeElapsed += Time.deltaTime;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.001f);
         }
     }
 }

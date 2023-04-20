@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementPattern: 5
   pauseDuration: 1
-  moveDuration: 2
+  moveDuration: 30
   scoreValue: 100
   explosionSize: 2
   hp: 15
