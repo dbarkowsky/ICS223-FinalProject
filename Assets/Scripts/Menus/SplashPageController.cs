@@ -7,9 +7,9 @@ using UnityEngine.SceneManagement;
 public class SplashPageController : MonoBehaviour
 {
     [SerializeField] CanvasRenderer splash;
-    [SerializeField] float fadeDelta = 0.001f; // how fast the screen will fade. Smaller is slower
     [SerializeField] AudioClip titleTheme;
     [SerializeField] AudioClip startSound;
+    private bool alreadyTriggered = false;
     
     // Start the title theme
     void Start()
@@ -20,8 +20,9 @@ public class SplashPageController : MonoBehaviour
     // IF the user hits Enter, fade out
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) && !alreadyTriggered)
         {
+            alreadyTriggered = true;
             StartCoroutine(FadeToBlack());
             SoundManager.Instance.StopMusic();
             SoundManager.Instance.PlaySfx(startSound);
@@ -29,16 +30,19 @@ public class SplashPageController : MonoBehaviour
     }
 
     // Fades the screen to black, then loads the next scene
+    // Colour should be all 255 to start, then reduces to all 0
     IEnumerator FadeToBlack()
     {
-        Color current = splash.GetColor();
-        while (current.g > 0)
+        float originalValue = splash.GetColor().g; // only checking green.
+        float targetValue = 0f;
+        float currentTime = 0f;
+        float duration = 4f;
+        while (currentTime < duration)
         {
-            yield return new WaitForSeconds(0.00025f);
-            current.r -= fadeDelta;
-            current.b -= fadeDelta;
-            current.g -= fadeDelta;
-            splash.SetColor(current);
+            yield return null;
+            float currentValue = Mathf.Lerp(originalValue, targetValue, currentTime / duration);
+            splash.SetColor(new Color(currentValue, currentValue, currentValue));
+            currentTime += Time.deltaTime;
         }
         SceneManager.LoadScene("Level1");
     }

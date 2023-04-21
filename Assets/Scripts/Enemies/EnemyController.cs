@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public uint scoreValue = 50;
     [SerializeField] public float explosionSize = 1f;
     [SerializeField] private int hp = 1;
-    private BoxCollider2D collider;
+    private new BoxCollider2D collider;
     private bool enemyCanShoot = true;
 
     [SerializeField] FiringPointController[] firingPoints;
