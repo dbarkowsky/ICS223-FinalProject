@@ -18,6 +18,9 @@ public class SpeechBubbleController : MonoBehaviour
     // To avoid talking over himself
     private bool currentlyTalking = false;
 
+    // To avoid talking in score screen
+    private bool muted = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +48,7 @@ public class SpeechBubbleController : MonoBehaviour
         Messenger<PickupController>.AddListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
         Messenger.AddListener(GameEvent.PLAYER_DEAD, OnPlayerDead);
         Messenger.AddListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
+        Messenger.AddListener(GameEvent.FADE_TO_SCORE, OnFadeToScore);
     }
 
     private void OnDestroy()
@@ -56,10 +60,17 @@ public class SpeechBubbleController : MonoBehaviour
         Messenger<PickupController>.RemoveListener(GameEvent.PICKUP_TOUCHED, OnPickupTouched);
         Messenger.RemoveListener(GameEvent.PLAYER_DEAD, OnPlayerDead);
         Messenger.RemoveListener(GameEvent.START_BOSS_BATTLE, OnStartBossBattle);
+        Messenger.RemoveListener(GameEvent.FADE_TO_SCORE, OnFadeToScore);
+    }
+
+    void OnFadeToScore()
+    {
+        muted = true;
     }
 
     void OnStartLevel()
     {
+        muted = false;
         CatSays(pressZ);
     }
 
@@ -98,7 +109,7 @@ public class SpeechBubbleController : MonoBehaviour
     // Check if already talking, if not, say the phrase
     private void CatSays(string phrase)
     {
-        if (!currentlyTalking)
+        if (!currentlyTalking && !muted)
         {
             currentlyTalking = true;
             if (currentScript != null)
